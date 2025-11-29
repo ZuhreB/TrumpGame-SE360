@@ -1,0 +1,51 @@
+Uygulamanın Adım Adım Çalışma Akışı
+
+Bu doküman, iki oyunculu uygulamanın Sunucu ve İstemci rollerindeki bilgisayarlarda nasıl çalıştığını adım adım açıklar.
+
+### GENEL BAKIŞ
+- Her iki oyuncu da aynı `java GameLogic` komutuyla programı çalıştırır.
+- Program başladığında `GameLogic`, `GameUI` ve `Connection` nesneleri oluşturulur ve birbirleriyle ilişkilendirilir. `GameLogic` merkezi kontrolcüdür.
+
+---
+### OYUNCU 1 (SUNUCU) TARAFINDA YAŞANANLAR
+---
+1.  **Program Başlar:** `java GameLogic` komutuyla program çalıştırılır. Boş bir arayüz penceresi açılır.
+2.  **Rol Seçimi:** Ekrana "Rol Seçimi" başlıklı bir diyalog penceresi gelir. Oyuncu 1, "Oyunu Kur (Sunucu)" seçeneğini tıklar.
+3.  **Sunucu Başlatma Komutu:** `GameLogic`, `Connection` sınıfının `startAsServer()` metodunu çağırır.
+4.  **Arka Plan İşlemi:** `Connection` sınıfı, arayüzün donmasını engellemek için yeni bir `Thread` (iş parçacığı) başlatır. Bundan sonraki ağ işlemleri bu thread üzerinde yürür.
+5.  **Arayüze Mesaj:** Arayüzde "[SISTEM] Sunucu baslatildi. Rakip bekleniyor..." mesajı belirir.
+6.  **IP Adresi Gösterilir:** Program, bilgisayarın yerel ağdaki IP adresini bulur ve arayüze yazar (Örn: "[SISTEM] IP Adresiniz: 192.168.1.34"). Bu IP adresinin Oyuncu 2'ye (İstemci) bildirilmesi gerekir.
+7.  **BEKLEME ANI (BLOKLAMA):** Arka planda çalışan thread, `serverSocket.accept()` komut satırında durur ve bir istemcinin (Oyuncu 2) ağ üzerinden bağlanmasını beklemeye başlar. Bu bekleme anında arayüz donmaz, çünkü işlem arka plan thread'inde yapılmaktadır.
+8.  **Bağlantı Gerçekleşir:** Oyuncu 2 kendi bilgisayarından bağlanma işlemini tamamladığında, `accept()` metodu bir `Socket` (iletişim kanalı) nesnesi döndürür ve bekleme sona erer.
+9.  **Bağlantı Bilgisi:** Arayüze "[SISTEM] Rakip baglandi..." mesajı ve rakibin IP adresi yazılır.
+10. **İletişim Kanalları Açılır:** `initializeStreams` metodu çağrılır. Bu metot, veri göndermek (`ObjectOutputStream`) ve almak (`ObjectInputStream`) için gerekli olan "stream"leri oluşturur.
+11. **Dinleyici Başlar:** Rakip oyuncudan herhangi bir anda gelebilecek mesajları dinlemek için yeni bir "listener" thread'i daha başlatılır. Bu thread, `in.readObject()` komutunda sürekli olarak yeni bir mesaj gelmesini bekler.
+12. **Oyun Hazır:** Arayüze "[SISTEM] Baglanti basarili! Oynayabilirsiniz." mesajı yazılır. Artık Oyuncu 1, metin kutusuna mesaj yazıp "Gonder" butonuna basabilir.
+
+---
+### OYUNCU 2 (İSTEMCİ) TARAFINDA YAŞANANLAR
+---
+1.  **Program Başlar:** `java GameLogic` komutuyla program çalıştırılır. Boş bir arayüz penceresi açılır.
+2.  **Rol Seçimi:** Ekrana "Rol Seçimi" başlıklı bir diyalog penceresi gelir. Oyuncu 2, "Oyuna Katil (Istemci)" seçeneğini tıklar.
+3.  **IP Girişi:** Ekrana "Sunucunun IP adresini girin:" diyen bir giriş penceresi çıkar. Oyuncu 2, Oyuncu 1'den öğrendiği IP adresini (örn: 192.168.1.34) buraya yazar ve "OK" butonuna tıklar.
+4.  **İstemci Başlatma Komutu:** `GameLogic`, girilen IP adresi ile `Connection` sınıfının `startAsClient()` metodunu çağırır.
+5.  **Arka Plan İşlemi:** `Connection` sınıfı, yeni bir `Thread` başlatır.
+6.  **BAĞLANMA DENEMESİ (BLOKLAMA):** Arka planda çalışan thread, `new Socket(hostIp, 12345)` komutu ile Oyuncu 1'in bilgisayarına ağ üzerinden bağlanmayı dener. Bu işlem birkaç saniye sürebilir.
+7.  **Bağlantı Gerçekleşir:** Oyuncu 1'in bilgisayarı bağlantı talebini kabul ettiğinde, `Socket` nesnesi başarıyla oluşturulur.
+8.  **İletişim Kanalları Açılır:** `initializeStreams` metodu çağrılır ve `ObjectOutputStream` / `ObjectInputStream` stream'leri oluşturulur.
+9.  **Dinleyici Başlar:** Rakip oyuncudan (Oyuncu 1) gelecek mesajları dinlemek için "listener" thread'i başlatılır.
+10. **Oyun Hazır:** Arayüze "[SISTEM] Baglanti basarili! Oynayabilirsiniz." mesajı yazılır. Artık Oyuncu 2 de mesaj göndermeye hazırdır.
+
+---
+### ÖRNEK MESAJLAŞMA AKIŞI (Oyuncu 1'den Oyuncu 2'ye)
+---
+1.  **Mesaj Yazma:** Oyuncu 1, arayüzdeki metin kutusuna "Nasılsın?" yazar ve "Gonder" butonuna tıklar.
+2.  **UI -> Logic:** `GameUI` sınıfı, bu eylemi yakalar ve `logic.processUserInput("Nasılsın?")` metodunu çağırır.
+3.  **Logic -> UI & Connection:** `GameLogic` sınıfı iki iş yapar:
+    a. Kendi arayüzüne mesajı yazdırmak için `ui.addMessage("Ben: Nasılsın?")` metodunu çağırır.
+    b. Mesajı ağa göndermek için `connection.sendMessage("Nasılsın?")` metodunu çağırır.
+4.  **Ağ Üzerinden Gönderim:** `Connection` sınıfı, `ObjectOutputStream`'ı kullanarak "Nasılsın?" metnini ağ üzerinden Oyuncu 2'ye gönderir.
+5.  **Rakip Dinleyici Uyanır:** Oyuncu 2'nin bilgisayarında sürekli bekleyen "listener" thread'i, ağdan gelen veriyi fark eder ve `in.readObject()` ile "Nasılsın?" mesajını okur.
+6.  **Listener -> Logic:** Listener thread'i, okuduğu mesajı işlemesi için `logic.processNetworkInput("Nasılsın?")` metodunu çağırır.
+7.  **Logic -> UI:** Oyuncu 2'nin `GameLogic` sınıfı, mesajı ekranda göstermesi için `ui.addMessage("Rakip: Nasılsın?")` metodunu çağırır.
+8.  **Ekranda Belirme:** "Rakip: Nasılsın?" mesajı Oyuncu 2'nin ekranında belirir.
