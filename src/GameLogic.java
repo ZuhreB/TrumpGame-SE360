@@ -5,24 +5,25 @@ import javax.swing.SwingUtilities;
 
 public class GameLogic {
 
-    private GameUI gui;
+    private GameUI lobbyGui;
+    private GamePageUI gameGui;
     private Connection connection;
     private String nickname;
 
     public GameLogic() {
-        this.gui = new GameUI(this);
+        this.lobbyGui = new GameUI(this);
         this.connection = new Connection(this);
     }
 
     public void start() {
-        SwingUtilities.invokeLater(() -> gui.setVisible(true));
+        SwingUtilities.invokeLater(() -> lobbyGui.setVisible(true));
     }
 
     public void hostGame(String nickname) {
         this.nickname = nickname;
         connection.startGameAsServer();
     }
-    
+
     public void cancelHost() {
         connection.cancelServer();
     }
@@ -32,24 +33,52 @@ public class GameLogic {
         if (hostIp != null && !hostIp.trim().isEmpty()) {
             connection.startGameAsClient(hostIp);
         } else {
-            gui.showGuiMessage("Gecerli bir bağlantı adresi girilmedi.");
+            lobbyGui.showGuiMessage("Gecerli bir bağlantı adresi girilmedi.");
+        }
+    }
+
+    public void startGamePage(boolean isHost) {
+        if (lobbyGui != null) {
+            lobbyGui.dispose();
+            lobbyGui = null;
+        }
+
+        this.gameGui = new GamePageUI(this, this.nickname, isHost);
+        gameGui.displayStatus("Bağlantı başarılı! Rakibiniz: " + connection.getOpponentIp());
+    }
+
+    public void disconnect() {
+        connection.closeConnection();
+        if (gameGui != null) {
+            gameGui.dispose();
+        }
+    }
+
+    public void sendMessage(String message) {
+        if (connection != null) {
+            showGameMessage("Siz: " + message);
+            connection.sendMessage(message);
         }
     }
 
 
     public void handleOpponentInput(String message) {
-        gui.showGuiMessage("Rakip: " + message);
+        showGameMessage("Rakip: " + message);
     }
 
     public void showGameMessage(String message) {
-        gui.showGuiMessage(message);
+        if (gameGui != null) {
+            gameGui.displayStatus(message);
+        } else {
+            lobbyGui.showGuiMessage(message);
+        }
     }
-    
+
     public void showWaitingDialog(String ip) {
-        gui.showWaitingDialog(ip);
+        lobbyGui.showWaitingDialog(ip);
     }
 
     public void closeWaitingDialog() {
-        gui.closeWaitingDialog();
+        lobbyGui.closeWaitingDialog();
     }
 }

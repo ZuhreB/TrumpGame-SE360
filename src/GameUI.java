@@ -2,6 +2,7 @@ package src;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class GameUI extends JFrame {
 
@@ -11,30 +12,56 @@ public class GameUI extends JFrame {
     private JButton joinButton;
     private JDialog waitingDialog;
 
+    private JTextField messageField;
+    private JButton sendButton;
+
     public GameUI(GameLogic logic) {
         super("Trump Game");
         this.logic = logic;
 
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
-        
+        setLayout(new BorderLayout(10, 10));
+
         JLabel titleLabel = new JLabel("TRUMP GAME", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
-        titleLabel.setBounds(0, 20, 500, 50);
-        add(titleLabel);
+        add(titleLabel, BorderLayout.NORTH);
+
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
 
         nicknameField = new JTextField("Oyuncu");
-        nicknameField.setBounds(150, 150, 200, 30);
-        add(nicknameField);
+        nicknameField.setMaximumSize(new Dimension(200, 30));
+        JPanel nicknamePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        nicknamePanel.add(nicknameField);
+        centerPanel.add(nicknamePanel);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 30)));
 
         hostButton = new JButton("Oyunu Kur (Oda sahibi)");
-        hostButton.setBounds(100, 250, 300, 40);
-        add(hostButton);
-
         joinButton = new JButton("Oyuna Katil");
-        joinButton.setBounds(100, 300, 300, 40);
-        add(joinButton);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.add(hostButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        buttonPanel.add(joinButton);
+
+        JPanel buttonContainer = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonContainer.add(buttonPanel);
+        centerPanel.add(buttonContainer);
+
+        add(centerPanel, BorderLayout.CENTER);
+
+        messageField = new JTextField(20);
+        sendButton = new JButton("Gönder");
+
+        JPanel sendPanel = new JPanel(new BorderLayout(5, 0));
+        sendPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+        sendPanel.add(messageField, BorderLayout.CENTER);
+        sendPanel.add(sendButton, BorderLayout.EAST);
+
+        add(sendPanel, BorderLayout.SOUTH);
 
         hostButton.addActionListener(e -> {
             String nickname = nicknameField.getText();
@@ -48,8 +75,23 @@ public class GameUI extends JFrame {
             String hostIp = JOptionPane.showInputDialog(this, "Oyunun bağlantı adresini girin:");
             logic.joinGame(nickname,hostIp);
         });
+
+        sendButton.addActionListener(e -> sendMessage());
+        messageField.addActionListener(e -> sendMessage());
+
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
-    
+
+    private void sendMessage() {
+        String message = messageField.getText();
+        if (!message.trim().isEmpty()) {
+            logic.sendMessage(message);
+            messageField.setText("");
+        }
+    }
+
     public void showGuiMessage(String message) {
         JOptionPane.showMessageDialog(this, message);
     }
@@ -69,7 +111,7 @@ public class GameUI extends JFrame {
             waitingDialog.dispose();
         });
         waitingDialog.add(cancelButton);
-        
+
         SwingUtilities.invokeLater(() -> waitingDialog.setVisible(true));
     }
 

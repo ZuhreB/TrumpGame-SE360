@@ -17,6 +17,7 @@ public class Connection {
     private ObjectInputStream in;
     private GameLogic logic;
     private ServerSocket serverSocket;
+    private Socket activeSocket;
 
     public Connection(GameLogic logic) {
         this.logic = logic;
@@ -26,16 +27,18 @@ public class Connection {
         try {
             serverSocket = new ServerSocket(12345);
             String ip = InetAddress.getLocalHost().getHostAddress();
-            
+
             new Thread(() -> {
                 try {
                     SwingUtilities.invokeLater(() -> logic.showWaitingDialog(ip));
 
                     Socket clientSocket = serverSocket.accept();
+                    this.activeSocket = clientSocket;
 
                     SwingUtilities.invokeLater(() -> {
                         logic.closeWaitingDialog();
-                        logic.showGameMessage("Rakip bağlandı: " + clientSocket.getInetAddress().getHostAddress());
+                        logic.startGamePage(true);
+
                         try {
                             listenOpponent(clientSocket);
                         } catch (IOException e) {
@@ -58,7 +61,7 @@ public class Connection {
             return null;
         }
     }
-    
+
     public void cancelServer() {
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {
@@ -74,7 +77,11 @@ public class Connection {
         new Thread(() -> {
             try {
                 Socket socket = new Socket(hostIp, 12345);
+                this.activeSocket = socket;
+
                 SwingUtilities.invokeLater(() -> {
+                    logic.startGamePage(false);
+
                     try {
                         listenOpponent(socket);
                     } catch (IOException e) {
@@ -117,6 +124,26 @@ public class Connection {
             } catch (IOException e) {
                 logic.showGameMessage("Mesaj gönderilemedi:" + e.getMessage());
             }
+        }
+    }
+
+    public String getOpponentIp() {
+        if (activeSocket != null) {
+            return activeSocket.getInetAddress().getHostAddress();
+        }
+        return "Bilinmiyor";
+    }
+
+    public void closeConnection() {
+        try {
+            if (activeSocket != null && !activeSocket.isClosed()) {
+                activeSocket.close();
+            }
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
+            }
+        } catch (IOException e) {
+            logic.showGameMessage("Bağlantılar kapatılırken hata oluştu: " + e.getMessage());
         }
     }
 }
