@@ -59,8 +59,5 @@ public class GameLogic {
         gui.showGuiMessage(message);
     }
 
-    public static void main(String[] args) {
-        GameLogic game = new GameLogic();
-        game.start();
-    }
+
 }
