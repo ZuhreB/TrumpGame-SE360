@@ -53,16 +53,6 @@ public class GameUI extends JFrame {
 
         add(centerPanel, BorderLayout.CENTER);
 
-        messageField = new JTextField(20);
-        sendButton = new JButton("Gönder");
-
-        JPanel sendPanel = new JPanel(new BorderLayout(5, 0));
-        sendPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-        sendPanel.add(messageField, BorderLayout.CENTER);
-        sendPanel.add(sendButton, BorderLayout.EAST);
-
-        add(sendPanel, BorderLayout.SOUTH);
-
         hostButton.addActionListener(e -> {
             String nickname = nicknameField.getText();
             setTitle("Trump Game - " + nickname + " (Oda sahibi)");
@@ -76,8 +66,7 @@ public class GameUI extends JFrame {
             logic.joinGame(nickname,hostIp);
         });
 
-        sendButton.addActionListener(e -> sendMessage());
-        messageField.addActionListener(e -> sendMessage());
+
 
         pack();
         setLocationRelativeTo(null);
