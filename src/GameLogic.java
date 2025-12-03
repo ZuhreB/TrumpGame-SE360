@@ -7,6 +7,7 @@ public class GameLogic {
 
     private GameUI gui;
     private Connection connection;
+    private String nickname;
 
     public GameLogic() {
         this.gui = new GameUI(this);
@@ -15,41 +16,26 @@ public class GameLogic {
 
     public void start() {
         SwingUtilities.invokeLater(() -> gui.setVisible(true));
-        gui.showGuiMessage("TrumpGame Oyununa hos geldiniz!");
+    }
 
-        String[] options = {"Oyunu Kur (Oda sahibi)", "Oyuna Katil (Misafir)"};
-        int choice = JOptionPane.showOptionDialog(
-                gui,
-                "Oyun kuracak mısınız, yoksa bir oyuna mı katılacaksınız?",
-                "Rol Seçimi",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]
-        );
+    public void hostGame(String nickname) {
+        this.nickname = nickname;
+        connection.startGameAsServer();
+    }
+    
+    public void cancelHost() {
+        connection.cancelServer();
+    }
 
-        if (choice == 0) {
-            gui.setTitle("Trump Game - Oyuncu 1 (Oda sahibi)");
-            connection.startGameAsServer();
-        } else if (choice == 1) {
-            gui.setTitle("Trump Game - Oyuncu 2 (Misafir)");
-            String hostIp = JOptionPane.showInputDialog(gui, "Oyunun bağlantı adresini girin:");
-            if (hostIp != null && !hostIp.trim().isEmpty()) {
-                connection.startGameAsClient(hostIp);
-            } else {
-                gui.showGuiMessage("Gecerli bir bağlantı adresi girilmedi. Oyun kapanıyor.");
-                new Thread(() -> { try { Thread.sleep(3000); } catch (InterruptedException e) {} System.exit(0); }).start();
-            }
+    public void joinGame(String nickname,String hostIp) {
+        this.nickname = nickname;
+        if (hostIp != null && !hostIp.trim().isEmpty()) {
+            connection.startGameAsClient(hostIp);
         } else {
-            System.exit(0);
+            gui.showGuiMessage("Gecerli bir bağlantı adresi girilmedi.");
         }
     }
 
-    public void handleUserInput(String message) {
-        gui.showGuiMessage("Ben: " + message);
-        connection.sendMessage(message);
-    }
 
     public void handleOpponentInput(String message) {
         gui.showGuiMessage("Rakip: " + message);
@@ -58,6 +44,12 @@ public class GameLogic {
     public void showGameMessage(String message) {
         gui.showGuiMessage(message);
     }
+    
+    public void showWaitingDialog(String ip) {
+        gui.showWaitingDialog(ip);
+    }
 
-
+    public void closeWaitingDialog() {
+        gui.closeWaitingDialog();
+    }
 }

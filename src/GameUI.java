@@ -5,10 +5,11 @@ import java.awt.*;
 
 public class GameUI extends JFrame {
 
-    private JTextArea messageArea;
-    private JTextField textField;
-    private JButton sendButton;
-    private GameLogic logic; // UI'ın komut göndereceği ana mantık sınıfı
+    private GameLogic logic;
+    private JTextField nicknameField;
+    private JButton hostButton;
+    private JButton joinButton;
+    private JDialog waitingDialog;
 
     public GameUI(GameLogic logic) {
         super("Trump Game");
@@ -16,35 +17,65 @@ public class GameUI extends JFrame {
 
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setLayout(null);
+        
+        JLabel titleLabel = new JLabel("TRUMP GAME", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
+        titleLabel.setBounds(0, 20, 500, 50);
+        add(titleLabel);
 
-        messageArea = new JTextArea();
-        messageArea.setEditable(false);
-        messageArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
-        add(new JScrollPane(messageArea), BorderLayout.CENTER);
+        nicknameField = new JTextField("Oyuncu");
+        nicknameField.setBounds(150, 150, 200, 30);
+        add(nicknameField);
 
-        JPanel bottomPanel = new JPanel(new BorderLayout());
-        textField = new JTextField();
-        textField.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        sendButton = new JButton("Gonder");
+        hostButton = new JButton("Oyunu Kur (Oda sahibi)");
+        hostButton.setBounds(100, 250, 300, 40);
+        add(hostButton);
 
-        bottomPanel.add(textField, BorderLayout.CENTER);
-        bottomPanel.add(sendButton, BorderLayout.EAST);
-        add(bottomPanel, BorderLayout.SOUTH);
+        joinButton = new JButton("Oyuna Katil");
+        joinButton.setBounds(100, 300, 300, 40);
+        add(joinButton);
 
-        sendButton.addActionListener(e -> sendMessage());
-        textField.addActionListener(e -> sendMessage());
+        hostButton.addActionListener(e -> {
+            String nickname = nicknameField.getText();
+            setTitle("Trump Game - " + nickname + " (Oda sahibi)");
+            logic.hostGame(nickname);
+        });
+
+        joinButton.addActionListener(e -> {
+            String nickname = nicknameField.getText();
+            setTitle("Trump Game - " + nickname + " (Misafir)");
+            String hostIp = JOptionPane.showInputDialog(this, "Oyunun bağlantı adresini girin:");
+            logic.joinGame(nickname,hostIp);
+        });
     }
-
-    private void sendMessage() {
-        String message = textField.getText();
-        if (!message.trim().isEmpty()) {
-            logic.handleUserInput(message);
-            textField.setText("");
-        }
-    }
-
+    
     public void showGuiMessage(String message) {
-        SwingUtilities.invokeLater(() -> messageArea.append(message + "\n"));
+        JOptionPane.showMessageDialog(this, message);
+    }
+
+    public void showWaitingDialog(String ip) {
+        waitingDialog = new JDialog(this, "Rakip Bekleniyor...", true);
+        waitingDialog.setSize(300, 150);
+        waitingDialog.setLayout(new FlowLayout());
+        waitingDialog.setLocationRelativeTo(this);
+
+        waitingDialog.add(new JLabel("Bağlantı adresi: " + ip));
+        waitingDialog.add(new JLabel("Rakip bekleniyor..."));
+
+        JButton cancelButton = new JButton("İptal");
+        cancelButton.addActionListener(e -> {
+            logic.cancelHost();
+            waitingDialog.dispose();
+        });
+        waitingDialog.add(cancelButton);
+        
+        SwingUtilities.invokeLater(() -> waitingDialog.setVisible(true));
+    }
+
+    public void closeWaitingDialog() {
+        if (waitingDialog != null) {
+            waitingDialog.dispose();
+        }
     }
 }

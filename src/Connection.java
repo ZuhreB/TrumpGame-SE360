@@ -9,44 +9,64 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class Connection {
 
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private GameLogic logic;
+    private ServerSocket serverSocket;
 
     public Connection(GameLogic logic) {
         this.logic = logic;
     }
 
-    public void startGameAsServer() {
-        new Thread(() -> {
-            try {
-                SwingUtilities.invokeLater(() -> logic.showGameMessage("Oyun kurucusu oyunu başlattı. Rakip bekleniyor..."));
+    public String startGameAsServer() {
+        try {
+            serverSocket = new ServerSocket(12345);
+            String ip = InetAddress.getLocalHost().getHostAddress();
+            
+            new Thread(() -> {
+                try {
+                    SwingUtilities.invokeLater(() -> logic.showWaitingDialog(ip));
 
-                try (ServerSocket serverSocket = new ServerSocket(12345)) {
-                    String ip = InetAddress.getLocalHost().getHostAddress();
-                    SwingUtilities.invokeLater(() -> {
-                        logic.showGameMessage("Bağlantı adresiniz: " + ip);
-                        logic.showGameMessage("Rakibiniz bu bağlantı adresini kullanarak baglanacak.");
-                    });
+                    Socket clientSocket = serverSocket.accept();
 
-                    Socket clientSocket = serverSocket.accept(); 
-                    
                     SwingUtilities.invokeLater(() -> {
+                        logic.closeWaitingDialog();
                         logic.showGameMessage("Rakip bağlandı: " + clientSocket.getInetAddress().getHostAddress());
                         try {
                             listenOpponent(clientSocket);
                         } catch (IOException e) {
-                             logic.showGameMessage("Oyun başlatılamadı: " + e.getMessage());
+                            logic.showGameMessage("Oyun başlatılamadı: " + e.getMessage());
                         }
                     });
+
+                } catch (SocketException e) {
+                    SwingUtilities.invokeLater(() -> {
+                        logic.closeWaitingDialog();
+                        logic.showGameMessage("Oyun kurulumu iptal edildi.");
+                    });
+                } catch (IOException e) {
+                    SwingUtilities.invokeLater(() -> logic.showGameMessage("Oyun başlatılamadı: " + e.getMessage()));
                 }
-            } catch (IOException e) {
-                SwingUtilities.invokeLater(() -> logic.showGameMessage("Oyun başlatılamadı: " + e.getMessage()));
+            }).start();
+            return ip;
+        } catch (IOException e) {
+            SwingUtilities.invokeLater(() -> logic.showGameMessage("Oyun başlatılamadı: " + e.getMessage()));
+            return null;
+        }
+    }
+    
+    public void cancelServer() {
+        try {
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
             }
-        }).start();
+        } catch (IOException e) {
+            logic.showGameMessage("Sunucu kapatılırken bir hata oluştu: " + e.getMessage());
+        }
     }
 
     public void startGameAsClient(String hostIp) {
@@ -69,7 +89,6 @@ public class Connection {
 
     private void listenOpponent(Socket socket) throws IOException {
         assignStreams(socket);
-
         Thread listenerThread = new Thread(() -> {
             try {
                 while (true) {
