@@ -3,27 +3,28 @@ package src.GamePage;
 import src.Connection;
 import src.Model.Card;
 import src.Model.GameState;
+import src.Model.Role;
 
 import java.util.ArrayList;
 
 public class GamePageLogic {
     private Connection conn = Connection.getInstance();
     private GameState gameState = GameState.getInstance();
+
     private static GamePageLogic instance = new GamePageLogic();
-
     private GamePageLogic(){};
-
     public static GamePageLogic getInstance() {
         return instance;
     }
 
     public void init(){
-        if(gameState.getMe().getRole()=="Host"){
+
+        if(gameState.getMe().getRole()== Role.HOST){
             Card.initAllCards();
             Card.shuffleAllCards();
             giveCardsToTheUser();
-            conn.sendUser(gameState.getMe());
-            conn.sendUser(gameState.getOpponent());
+            conn.sendUserObject(gameState.getMe());
+            conn.sendUserObject(gameState.getOpponent());
         }
     }
 
@@ -58,8 +59,6 @@ public class GamePageLogic {
 
 
     }
-
-
 
 
 }

@@ -8,7 +8,7 @@ public class GameState {
      private GameState(){}
 
     public  void setMe(User me) {
-        me = me;
+        this.me = me;
     }
 
     public  User getMe(){
@@ -20,7 +20,7 @@ public class GameState {
     }
 
     public  void setOpponent(User opponent) {
-        opponent = opponent;
+        this.opponent = opponent;
     }
 
     public static GameState getInstance() {

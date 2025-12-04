@@ -45,7 +45,6 @@ public class Card {
         Collections.shuffle(allCards);
     }
 
-
     public String getPng_address() {
         return png_address;
     }

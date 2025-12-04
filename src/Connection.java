@@ -2,6 +2,7 @@ package src;
 
 import src.GameLogic;
 import src.Model.GameState;
+import src.Model.Role;
 import src.Model.User;
 import src.utils.AddressConverter;
 
@@ -34,7 +35,7 @@ public class Connection {
     }
 
 
-    public String startGameAsServer() {
+    public String joinGameAsHost() {
         try {
             serverSocket = new ServerSocket(12345);
             String ip = InetAddress.getLocalHost().getHostAddress();
@@ -48,7 +49,7 @@ public class Connection {
 
                     SwingUtilities.invokeLater(() -> {
                         logic.closeWaitingDialog();
-                        logic.startGamePage(true);
+                        logic.startGamePage();
 
                         try {
                             listenOpponent(clientSocket);
@@ -83,7 +84,7 @@ public class Connection {
         }
     }
 
-    public void startGameAsClient(String code) {
+    public void joinGameAsGuest(String code) {
         logic.showGameMessage("Oyuna bağlanılıyor: " + code);
         new Thread(() -> {
             try {
@@ -91,7 +92,7 @@ public class Connection {
                 this.activeSocket = socket;
 
                 SwingUtilities.invokeLater(() -> {
-                    logic.startGamePage(false);
+                    logic.startGamePage();
 
                     try {
                         listenOpponent(socket);
@@ -113,9 +114,9 @@ public class Connection {
                     Object obj = in.readObject();
 
                     if(obj instanceof User user){
-                        if(user.getRole()=="Host"){
+                        if(user.getRole()== Role.HOST){
                             gameState.setOpponent(user);
-                        }else if(user.getRole()=="Guest"){
+                        }else if(user.getRole()==Role.GUEST){
                             gameState.setMe(user);
                         }
                     }else{
@@ -149,7 +150,7 @@ public class Connection {
         }
     }
 
-    public void sendUser(User user){
+    public void sendUserObject(User user){
         if(out!=null){
             try{
                 out.writeObject(user);
@@ -157,13 +158,6 @@ public class Connection {
                 logic.showGameMessage("Bilgiler gönderilemedi:" + e.getMessage());
             }
         }
-    }
-
-    public String getOpponentIp() {
-        if (activeSocket != null) {
-            return activeSocket.getInetAddress().getHostAddress();
-        }
-        return "Bilinmiyor";
     }
 
     public void closeConnection() {

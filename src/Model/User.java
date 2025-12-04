@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class User {
     String nickName;
     int score;
-    String role;
+    Role role;
     ArrayList<Card> board_cards;
     ArrayList<Card> hand_cards;
     ArrayList<Card> taken_cards;
@@ -27,11 +27,11 @@ public class User {
         this.score = score;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
