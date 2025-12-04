@@ -62,8 +62,8 @@ public class GameUI extends JFrame {
         joinButton.addActionListener(e -> {
             String nickname = nicknameField.getText();
             setTitle("Trump Game - " + nickname + " (Misafir)");
-            String hostIp = JOptionPane.showInputDialog(this, "Oyunun bağlantı adresini girin:");
-            logic.joinGame(nickname,hostIp);
+            String code = JOptionPane.showInputDialog(this, "Oyunun kodunu girin:");
+            logic.joinGame(nickname,code);
         });
 
 
@@ -85,13 +85,13 @@ public class GameUI extends JFrame {
         JOptionPane.showMessageDialog(this, message);
     }
 
-    public void showWaitingDialog(String ip) {
+    public void showWaitingDialog(String code) {
         waitingDialog = new JDialog(this, "Rakip Bekleniyor...", true);
         waitingDialog.setSize(300, 150);
         waitingDialog.setLayout(new FlowLayout());
         waitingDialog.setLocationRelativeTo(this);
 
-        waitingDialog.add(new JLabel("Bağlantı adresi: " + ip));
+        waitingDialog.add(new JLabel("Bağlantı kodu: " + code));
         waitingDialog.add(new JLabel("Rakip bekleniyor..."));
 
         JButton cancelButton = new JButton("İptal");

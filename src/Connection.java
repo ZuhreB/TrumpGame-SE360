@@ -1,6 +1,7 @@
 package src;
 
 import src.GameLogic;
+import src.utils.AddressConverter;
 
 import javax.swing.SwingUtilities;
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class Connection {
 
             new Thread(() -> {
                 try {
-                    SwingUtilities.invokeLater(() -> logic.showWaitingDialog(ip));
+                    SwingUtilities.invokeLater(() -> logic.showWaitingDialog(AddressConverter.addressToCode(ip)));
 
                     Socket clientSocket = serverSocket.accept();
                     this.activeSocket = clientSocket;
@@ -72,11 +73,11 @@ public class Connection {
         }
     }
 
-    public void startGameAsClient(String hostIp) {
-        logic.showGameMessage("Oyuna bağlanılıyor: " + hostIp);
+    public void startGameAsClient(String code) {
+        logic.showGameMessage("Oyuna bağlanılıyor: " + code);
         new Thread(() -> {
             try {
-                Socket socket = new Socket(hostIp, 12345);
+                Socket socket = new Socket(AddressConverter.codeToAddress(code), 12345);
                 this.activeSocket = socket;
 
                 SwingUtilities.invokeLater(() -> {

@@ -28,10 +28,10 @@ public class GameLogic {
         connection.cancelServer();
     }
 
-    public void joinGame(String nickname,String hostIp) {
+    public void joinGame(String nickname,String code) {
         this.nickname = nickname;
-        if (hostIp != null && !hostIp.trim().isEmpty()) {
-            connection.startGameAsClient(hostIp);
+        if (code != null && !code.trim().isEmpty()) {
+            connection.startGameAsClient(code);
         } else {
             lobbyGui.showGuiMessage("Gecerli bir bağlantı adresi girilmedi.");
         }
