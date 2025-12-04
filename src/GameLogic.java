@@ -44,7 +44,6 @@ public class GameLogic {
         }
 
         this.gameGui = new GamePageUI(this, this.nickname, isHost);
-        gameGui.displayStatus("Bağlantı başarılı! Rakibiniz: " + connection.getOpponentIp());
     }
 
     public void disconnect() {
@@ -68,7 +67,6 @@ public class GameLogic {
 
     public void showGameMessage(String message) {
         if (gameGui != null) {
-            gameGui.displayStatus(message);
         } else {
             lobbyGui.showGuiMessage(message);
         }
