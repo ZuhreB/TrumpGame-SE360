@@ -7,20 +7,27 @@ import src.Model.GameState;
 import java.util.ArrayList;
 
 public class GamePageLogic {
-    static Connection conn = new Connection();
+    private Connection conn = Connection.getInstance();
+    private GameState gameState = GameState.getInstance();
+    private static GamePageLogic instance = new GamePageLogic();
 
-    public static void init(){
+    private GamePageLogic(){};
 
-        if(GameState.getMe().getRole()=="Host"){
+    public static GamePageLogic getInstance() {
+        return instance;
+    }
+
+    public void init(){
+        if(gameState.getMe().getRole()=="Host"){
             Card.initAllCards();
             Card.shuffleAllCards();
             giveCardsToTheUser();
-            conn.sendUser(GameState.getMe());
-            conn.sendUser(GameState.getOpponent());
+            conn.sendUser(gameState.getMe());
+            conn.sendUser(gameState.getOpponent());
         }
     }
 
-    private static void giveCardsToTheUser(){
+    private void giveCardsToTheUser(){
         ArrayList<Card> allCards=Card.getAllCards();
         ArrayList<Card> myBoardCards=new ArrayList<>();
         ArrayList<Card> opponentBoardCards=new ArrayList<>();
@@ -44,14 +51,10 @@ public class GamePageLogic {
             opponentBoardCards.add(allCards.remove(i));
         }
 
-
-
-
-
-        GameState.getMe().setBoard_cards(myBoardCards);
-        GameState.getMe().setHand_cards(myHandCards);
-        GameState.getOpponent().setBoard_cards(opponentBoardCards);
-        GameState.getOpponent().setHand_cards(opponentHandCards);
+        gameState.getMe().setBoard_cards(myBoardCards);
+        gameState.getMe().setHand_cards(myHandCards);
+        gameState.getOpponent().setBoard_cards(opponentBoardCards);
+        gameState.getOpponent().setHand_cards(opponentHandCards);
 
 
     }

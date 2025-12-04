@@ -11,16 +11,12 @@ public class Card {
 
     }
     String png_address;
-    public static final String closed_face_address ="src/cards/card_close.jpg";
+    public static final String CLOSED_FACE_ADDRESS ="src/cards/card_close.jpg";
     String number;
     String type;
     boolean isClose;
     User owner;
     static ArrayList<Card> allCards = new ArrayList<>();
-
-
-
-
 
     public Card(String png_address, String number, boolean isClose, String type) {
         this.png_address = png_address;
@@ -30,7 +26,7 @@ public class Card {
     }
 
     public static void initAllCards(){
-// Define the standard suits and ranks for a deck.
+        // Define the standard suits and ranks for a deck.
         List<String> types = Arrays.asList("clubs", "diamonds", "hearts", "spades");
         List<String> numbers = Arrays.asList("2", "3", "4", "5", "6", "7", "8", "9", "10", "ace", "jack", "king", "queen");
 
@@ -48,8 +44,6 @@ public class Card {
     public static void shuffleAllCards(){
         Collections.shuffle(allCards);
     }
-
-
 
 
     public String getPng_address() {

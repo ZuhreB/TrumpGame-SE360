@@ -2,6 +2,7 @@ package src.GamePage;
 
 import src.GameLogic;
 import src.Model.Card;
+import src.Model.GameState;
 import src.Model.User;
 
 import javax.swing.*;
@@ -11,7 +12,6 @@ import java.awt.*;
 
 public class GamePageUI extends JFrame {
 
-    private GameLogic logic;
     private JLabel myScoreLabel;
     private JLabel opponentScoreLabel;
 
@@ -21,14 +21,19 @@ public class GamePageUI extends JFrame {
     private final Color BUTTON_COLOR = new Color(180, 60, 60);
     private final Color CARD_COLOR = new Color(200, 200, 200);
 
-
+    private GamePageLogic gamePageLogic = GamePageLogic.getInstance();
+    private GameLogic gameLogic= GameLogic.getInstance();
+    private GameState gameState = GameState.getInstance();
     Card card=new Card("src/cards/card_close.jpg","Lu",true,"");
-    public GamePageUI(GameLogic logic, String nickname, boolean isHost) {
-        super("Trump Game - " + nickname);
+    private static GamePageUI instace = new GamePageUI();
 
-        GamePageLogic.init();
 
-        this.logic = logic;
+
+    private GamePageUI() {
+        super("Trump Game - ");
+
+        gamePageLogic.init();
+
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,7 +50,7 @@ public class GamePageUI extends JFrame {
         exitButton.setForeground(Color.WHITE);
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> {
-            logic.disconnect();
+            gameLogic.disconnect();
             dispose();
         });
 
@@ -138,7 +143,7 @@ public class GamePageUI extends JFrame {
         cardPanel.setOpaque(false);
 
         // Card sınıfındaki static adresi kullanarak resmi yükle
-        String cardImageAdress=card.isClose()?Card.closed_face_address:card.getPng_address();
+        String cardImageAdress=card.isClose()?Card.CLOSED_FACE_ADDRESS:card.getPng_address();
         ImageIcon imageIcon = new ImageIcon(cardImageAdress);
 
         // Resmi karta sığacak şekilde boyutlandır
@@ -158,5 +163,8 @@ public class GamePageUI extends JFrame {
         cardPanel.add(label, BorderLayout.CENTER);
         return cardPanel;
     }
-    
+
+    public static GamePageUI getInstace() {
+        return instace;
+    }
 }

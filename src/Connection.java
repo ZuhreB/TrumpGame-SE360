@@ -18,17 +18,21 @@ public class Connection {
 
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private GameLogic logic;
     private ServerSocket serverSocket;
     private Socket activeSocket;
 
-    public Connection(GameLogic logic) {
-        this.logic = logic;
+    private GameLogic logic=GameLogic.getInstance();
+    private GameState gameState = GameState.getInstance();
+
+    private static Connection instance = new Connection();
+
+    private Connection() {
     }
 
-    public Connection(){
-
+    public static Connection getInstance() {
+        return instance;
     }
+
 
     public String startGameAsServer() {
         try {
@@ -110,9 +114,9 @@ public class Connection {
 
                     if(obj instanceof User user){
                         if(user.getRole()=="Host"){
-                            GameState.setOpponent(user);
+                            gameState.setOpponent(user);
                         }else if(user.getRole()=="Guest"){
-                            GameState.setMe(user);
+                            gameState.setMe(user);
                         }
                     }else{
                         String receivedMessage = (String) obj;

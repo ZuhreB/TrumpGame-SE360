@@ -1,23 +1,29 @@
 package src.Model;
 
 public class GameState {
-    static User me = new User();
-    static User opponent = new User();
+     User me = new User();
+     User opponent = new User();
+     private static GameState instance= new GameState();
 
+     private GameState(){}
 
-    public static void setMe(User me) {
+    public  void setMe(User me) {
         me = me;
     }
 
-    public static User getMe(){
+    public  User getMe(){
         return me;
     }
 
-    public static User getOpponent() {
+    public  User getOpponent() {
         return opponent;
     }
 
-    public static void setOpponent(User opponent) {
+    public  void setOpponent(User opponent) {
         opponent = opponent;
+    }
+
+    public static GameState getInstance() {
+        return instance;
     }
 }

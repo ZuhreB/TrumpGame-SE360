@@ -7,13 +7,18 @@ import javax.swing.SwingUtilities;
 
 public class GameLogic {
 
-    private MainPageUI lobbyGui;
+    private MainPageUI lobbyGui=MainPageUI.getInstance();
     private GamePageUI gameGui;
-    private Connection connection;
+    private Connection connection=Connection.getInstance();
+    private GameState gameState = GameState.getInstance();
 
-    public GameLogic() {
-        this.lobbyGui = new MainPageUI(this);
-        this.connection = new Connection(this);
+    private static GameLogic instance = new GameLogic();
+
+    public static GameLogic getInstance() {
+        return instance;
+    }
+
+    private GameLogic() {
     }
 
     public void start() {
@@ -21,8 +26,8 @@ public class GameLogic {
     }
 
     public void joinGameAsHost(String nickname) {
-        GameState.getMe().setNickName(nickname);
-        GameState.getMe().setRole("Host");
+        gameState.getMe().setNickName(nickname);
+        gameState.getMe().setRole("Host");
         connection.startGameAsServer();
     }
 
@@ -31,8 +36,8 @@ public class GameLogic {
     }
 
     public void joinGameAsGuest(String nickname,String code) {
-        GameState.getMe().setNickName(nickname);
-        GameState.getMe().setRole("Guest");
+        gameState.getMe().setNickName(nickname);
+        gameState.getMe().setRole("Guest");
         if (code != null && !code.trim().isEmpty()) {
             connection.startGameAsClient(code);
         } else {
@@ -46,7 +51,7 @@ public class GameLogic {
             lobbyGui = null;
         }
 
-        this.gameGui = new GamePageUI(this, GameState.getMe().getNickName(), isHost);
+        this.gameGui = GamePageUI.getInstace();
     }
 
     public void disconnect() {

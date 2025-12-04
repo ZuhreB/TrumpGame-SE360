@@ -5,7 +5,9 @@ import java.awt.*;
 
 public class MainPageUI extends JFrame {
 
-    private GameLogic logic;
+    private GameLogic logic=GameLogic.getInstance();
+    private static MainPageUI instance = new MainPageUI();
+
     private JTextField nicknameField;
     private JButton hostButton;
     private JButton joinButton;
@@ -16,7 +18,8 @@ public class MainPageUI extends JFrame {
     private final Color BUTTON_COLOR = new Color(75, 110, 175);
     private final Font MAIN_FONT = new Font("Arial", Font.BOLD, 18);
 
-    public MainPageUI(GameLogic logic) {
+
+    private MainPageUI() {
         super("Trump Game");
         this.logic = logic;
 
@@ -86,6 +89,10 @@ public class MainPageUI extends JFrame {
         });
 
         setVisible(true);
+    }
+
+    public static MainPageUI getInstance() {
+        return instance;
     }
 
     private JButton createStyledButton(String text) {
