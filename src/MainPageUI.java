@@ -3,7 +3,7 @@ package src;
 import javax.swing.*;
 import java.awt.*;
 
-public class GameUI extends JFrame {
+public class MainPageUI extends JFrame {
 
     private GameLogic logic;
     private JTextField nicknameField;
@@ -16,7 +16,7 @@ public class GameUI extends JFrame {
     private final Color BUTTON_COLOR = new Color(75, 110, 175);
     private final Font MAIN_FONT = new Font("Arial", Font.BOLD, 18);
 
-    public GameUI(GameLogic logic) {
+    public MainPageUI(GameLogic logic) {
         super("Trump Game");
         this.logic = logic;
 
@@ -75,14 +75,14 @@ public class GameUI extends JFrame {
         hostButton.addActionListener(e -> {
             String nickname = nicknameField.getText();
             setTitle("Trump Game - " + nickname + " (Oda Sahibi)");
-            logic.hostGame(nickname);
+            logic.joinGameAsHost(nickname);
         });
 
         joinButton.addActionListener(e -> {
             String nickname = nicknameField.getText();
             setTitle("Trump Game - " + nickname + " (Misafir)");
             String code = JOptionPane.showInputDialog(this, "Oyun kodunu girin:");
-            if (code != null) logic.joinGame(nickname, code);
+            if (code != null) logic.joinGameAsGuest(nickname, code);
         });
 
         setVisible(true);

@@ -1,17 +1,18 @@
 package src;
 
-import javax.swing.JOptionPane;
+import src.GamePage.GamePageUI;
+import src.Model.GameState;
+
 import javax.swing.SwingUtilities;
 
 public class GameLogic {
 
-    private GameUI lobbyGui;
+    private MainPageUI lobbyGui;
     private GamePageUI gameGui;
     private Connection connection;
-    private String nickname;
 
     public GameLogic() {
-        this.lobbyGui = new GameUI(this);
+        this.lobbyGui = new MainPageUI(this);
         this.connection = new Connection(this);
     }
 
@@ -19,8 +20,9 @@ public class GameLogic {
         SwingUtilities.invokeLater(() -> lobbyGui.setVisible(true));
     }
 
-    public void hostGame(String nickname) {
-        this.nickname = nickname;
+    public void joinGameAsHost(String nickname) {
+        GameState.getMe().setNickName(nickname);
+        GameState.getMe().setRole("Host");
         connection.startGameAsServer();
     }
 
@@ -28,8 +30,9 @@ public class GameLogic {
         connection.cancelServer();
     }
 
-    public void joinGame(String nickname,String code) {
-        this.nickname = nickname;
+    public void joinGameAsGuest(String nickname,String code) {
+        GameState.getMe().setNickName(nickname);
+        GameState.getMe().setRole("Guest");
         if (code != null && !code.trim().isEmpty()) {
             connection.startGameAsClient(code);
         } else {
@@ -43,7 +46,7 @@ public class GameLogic {
             lobbyGui = null;
         }
 
-        this.gameGui = new GamePageUI(this, this.nickname, isHost);
+        this.gameGui = new GamePageUI(this, GameState.getMe().getNickName(), isHost);
     }
 
     public void disconnect() {

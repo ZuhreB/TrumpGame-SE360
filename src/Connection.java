@@ -1,6 +1,8 @@
 package src;
 
 import src.GameLogic;
+import src.Model.GameState;
+import src.Model.User;
 import src.utils.AddressConverter;
 
 import javax.swing.SwingUtilities;
@@ -22,6 +24,10 @@ public class Connection {
 
     public Connection(GameLogic logic) {
         this.logic = logic;
+    }
+
+    public Connection(){
+
     }
 
     public String startGameAsServer() {
@@ -100,8 +106,19 @@ public class Connection {
         Thread listenerThread = new Thread(() -> {
             try {
                 while (true) {
-                    String receivedMessage = (String) in.readObject();
-                    logic.handleOpponentInput(receivedMessage);
+                    Object obj = in.readObject();
+
+                    if(obj instanceof User user){
+                        if(user.getRole()=="Host"){
+                            GameState.setOpponent(user);
+                        }else if(user.getRole()=="Guest"){
+                            GameState.setMe(user);
+                        }
+                    }else{
+                        String receivedMessage = (String) obj;
+                        logic.handleOpponentInput(receivedMessage);
+                    }
+
                 }
             } catch (Exception e) {
                 logic.showGameMessage("Rakibin bağlantısı koptu.");
@@ -124,6 +141,16 @@ public class Connection {
                 out.flush();
             } catch (IOException e) {
                 logic.showGameMessage("Mesaj gönderilemedi:" + e.getMessage());
+            }
+        }
+    }
+
+    public void sendUser(User user){
+        if(out!=null){
+            try{
+                out.writeObject(user);
+            }catch (IOException e){
+                logic.showGameMessage("Bilgiler gönderilemedi:" + e.getMessage());
             }
         }
     }

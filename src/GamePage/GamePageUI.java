@@ -1,4 +1,8 @@
-package src;
+package src.GamePage;
+
+import src.GameLogic;
+import src.Model.Card;
+import src.Model.User;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -17,8 +21,13 @@ public class GamePageUI extends JFrame {
     private final Color BUTTON_COLOR = new Color(180, 60, 60);
     private final Color CARD_COLOR = new Color(200, 200, 200);
 
+
+    Card card=new Card("src/cards/card_close.jpg","Lu",true,"");
     public GamePageUI(GameLogic logic, String nickname, boolean isHost) {
         super("Trump Game - " + nickname);
+
+        GamePageLogic.init();
+
         this.logic = logic;
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -92,14 +101,14 @@ public class GamePageUI extends JFrame {
 
 
         for (int i = 0; i < 10; i++) {
-            topGrid.add(createCardPlaceholder("Kart " + (i + 1)));
+            topGrid.add(createCardPlaceholder(card,false));
         }
 
         JPanel bottomGrid = new JPanel(new GridLayout(2, 5, 10, 10));
         bottomGrid.setBackground(BG_COLOR);
 
         for (int i = 0; i < 10; i++) {
-            bottomGrid.add(createCardPlaceholder("Kart " + (i + 1)));
+            bottomGrid.add(createCardPlaceholder(card,false));
         }
 
         centerPanel.add(topGrid);
@@ -110,12 +119,12 @@ public class GamePageUI extends JFrame {
         JPanel eastPanel = new JPanel(new GridLayout(6, 1, 0, 10));
         eastPanel.setBackground(PANEL_COLOR);
         eastPanel.setPreferredSize(new Dimension(150, 0));
-        eastPanel.setBorder(new EmptyBorder(20, 10, 20, 10));
+        eastPanel.setBorder(new EmptyBorder(3, 10, 3, 10));
 
         for (int i = 0; i < 6; i++) {
-            JPanel card = createCardPlaceholder("Yan " + (i + 1));
-            card.setBackground(new Color(100, 149, 237));
-            eastPanel.add(card);
+            JPanel cards = createCardPlaceholder(card,true);
+            cards.setBackground(new Color(100, 149, 237));
+            eastPanel.add(cards);
         }
 
         add(eastPanel, BorderLayout.EAST);
@@ -123,17 +132,31 @@ public class GamePageUI extends JFrame {
         setVisible(true);
     }
 
-    private JPanel createCardPlaceholder(String text) {
-        JPanel card = new JPanel(new BorderLayout());
-        card.setBackground(CARD_COLOR);
-        card.setBorder(new LineBorder(Color.BLACK, 2));
+    private JPanel createCardPlaceholder(Card card,boolean isRightCard) {
+        JPanel cardPanel = new JPanel(new BorderLayout());
+        cardPanel.setBackground(CARD_COLOR);
+        cardPanel.setOpaque(false);
 
-        JLabel label = new JLabel(text, SwingConstants.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 14));
-        label.setForeground(Color.BLACK);
+        // Card sınıfındaki static adresi kullanarak resmi yükle
+        String cardImageAdress=card.isClose()?Card.closed_face_address:card.getPng_address();
+        ImageIcon imageIcon = new ImageIcon(cardImageAdress);
 
-        card.add(label, BorderLayout.CENTER);
-        return card;
+        // Resmi karta sığacak şekilde boyutlandır
+        Image image = imageIcon.getImage();
+        if(isRightCard){
+            Image newimg = image.getScaledInstance(70, 90,  java.awt.Image.SCALE_SMOOTH);
+            imageIcon = new ImageIcon(newimg);
+        }else{
+            Image newimg = image.getScaledInstance(80, 120,  java.awt.Image.SCALE_SMOOTH);
+            imageIcon = new ImageIcon(newimg);
+        }
+
+
+        // Label'ı artık text ile değil, icon ile oluşturuyoruz
+        JLabel label = new JLabel(imageIcon);
+
+        cardPanel.add(label, BorderLayout.CENTER);
+        return cardPanel;
     }
     
 }
