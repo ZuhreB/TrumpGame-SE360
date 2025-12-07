@@ -125,10 +125,14 @@ public class Connection {
                             GameState.getInstance().setOpponent(user);
                             System.out.println(user.getNickName());
                             System.out.println(user.getRole());
-                            System.out.println(user.getBoard_cards());
+                            System.out.println(user.getBoard_cards().toArray().toString());
 
                         }else if(user.getRole()==Role.GUEST){
                             System.out.println("guest geldi");
+                            System.out.println(user.getRole());
+                            System.out.println(user.getBoard_cards().toArray().toString());
+                            System.out.println(user.getHand_cards().toArray().toString());
+
 
                             GameState.getInstance().setMe(user);
                         }

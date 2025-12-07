@@ -33,7 +33,9 @@ public class GameLogic {
     public void joinGameAsHost(String nickname) {
         GameState.getInstance().getMe().setNickName(nickname);
         GameState.getInstance().getMe().setRole(Role.HOST);
+        GameState.getInstance().getOpponent().setRole(Role.GUEST);
         Connection.getInstance().joinGameAsHost();
+
     }
 
     public void joinGameAsGuest(String nickname,String code) {
