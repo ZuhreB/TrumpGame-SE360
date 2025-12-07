@@ -3,6 +3,7 @@ package src.GamePage;
 import src.GameLogic;
 import src.Model.Card;
 import src.Model.GameState;
+import src.Model.Role;
 import src.Model.User;
 
 import javax.swing.*;
@@ -29,7 +30,7 @@ public class GamePageUI extends JFrame {
     //SONRADAN MÜDAHELE EDİLECEK PANELLER
     JPanel bottomGrid;
     JPanel topGrid;
-
+    JPanel westPanel;
     private GamePageUI() {
         super("Trump Game - ");
         System.out.println("game page ui constructoru başlatıldı");
@@ -61,7 +62,7 @@ public class GamePageUI extends JFrame {
 
         add(northPanel, BorderLayout.NORTH);
 
-        JPanel westPanel = new JPanel();
+        westPanel = new JPanel();
         westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
         westPanel.setBackground(PANEL_COLOR);
         westPanel.setPreferredSize(new Dimension(200, 0));
@@ -163,21 +164,33 @@ public class GamePageUI extends JFrame {
 
     public void refreshGrids() {
         bottomGrid.removeAll();
+
+        Role myRole = GameState.getInstance().getMe().getRole();
         ArrayList<Card> myBoardCards = GameState.getInstance().getMe().getBoard_cards();
 
         if (myBoardCards != null && myBoardCards.size() >= 20) {
-            for (int i = 10; i < 20; i++) {
-                bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false));
+
+            if (myRole == Role.GUEST) {
+                for (int i = 19; i >= 10; i--) {
+                    bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false));
+                }
+            } else {
+                for (int i = 10; i < 20; i++) {
+                    bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false));
+                }
             }
         }
 
         bottomGrid.revalidate();
         bottomGrid.repaint();
 
+        // ---------------- TOP GRID (RAKİBİN KARTLARI) ----------------
         topGrid.removeAll();
         ArrayList<Card> myOpponentBoardCards = GameState.getInstance().getOpponent().getBoard_cards();
 
         if (myOpponentBoardCards != null && myOpponentBoardCards.size() >= 20) {
+            // Rakip kartları her zaman düz (veya isteğe göre ters) basılabilir.
+            // Genelde rakip kartları standart (10-19) bırakılır.
             for (int i = 10; i < 20; i++) {
                 topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false));
             }
@@ -185,9 +198,7 @@ public class GamePageUI extends JFrame {
 
         topGrid.revalidate();
         topGrid.repaint();
-
     }
-
 
     public static GamePageUI getInstace() {
         return instace;
