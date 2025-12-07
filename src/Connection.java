@@ -22,8 +22,6 @@ public class Connection {
     private ServerSocket serverSocket;
     private Socket activeSocket;
 
-    private GameLogic logic=GameLogic.getInstance();
-    private GameState gameState = GameState.getInstance();
 
     private static Connection instance = new Connection();
 
@@ -42,34 +40,34 @@ public class Connection {
 
             new Thread(() -> {
                 try {
-                    SwingUtilities.invokeLater(() -> logic.showWaitingDialog(AddressConverter.addressToCode(ip)));
+                    SwingUtilities.invokeLater(() -> GameLogic.getInstance().showWaitingDialog(AddressConverter.addressToCode(ip)));
 
                     Socket clientSocket = serverSocket.accept();
                     this.activeSocket = clientSocket;
 
                     SwingUtilities.invokeLater(() -> {
-                        logic.closeWaitingDialog();
-                        logic.startGamePage();
+                        GameLogic.getInstance().closeWaitingDialog();
+                        GameLogic.getInstance().startGamePage();
 
                         try {
                             listenOpponent(clientSocket);
                         } catch (IOException e) {
-                            logic.showGameMessage("Oyun başlatılamadı: " + e.getMessage());
+                            GameLogic.getInstance().showGameMessage("Oyun başlatılamadı: " + e.getMessage());
                         }
                     });
 
                 } catch (SocketException e) {
                     SwingUtilities.invokeLater(() -> {
-                        logic.closeWaitingDialog();
-                        logic.showGameMessage("Oyun kurulumu iptal edildi.");
+                        GameLogic.getInstance().closeWaitingDialog();
+                        GameLogic.getInstance().showGameMessage("Oyun kurulumu iptal edildi.");
                     });
                 } catch (IOException e) {
-                    SwingUtilities.invokeLater(() -> logic.showGameMessage("Oyun başlatılamadı: " + e.getMessage()));
+                    SwingUtilities.invokeLater(() -> GameLogic.getInstance().showGameMessage("Oyun başlatılamadı: " + e.getMessage()));
                 }
             }).start();
             return ip;
         } catch (IOException e) {
-            SwingUtilities.invokeLater(() -> logic.showGameMessage("Oyun başlatılamadı: " + e.getMessage()));
+            SwingUtilities.invokeLater(() -> GameLogic.getInstance().showGameMessage("Oyun başlatılamadı: " + e.getMessage()));
             return null;
         }
     }
@@ -80,28 +78,28 @@ public class Connection {
                 serverSocket.close();
             }
         } catch (IOException e) {
-            logic.showGameMessage("Sunucu kapatılırken bir hata oluştu: " + e.getMessage());
+            GameLogic.getInstance().showGameMessage("Sunucu kapatılırken bir hata oluştu: " + e.getMessage());
         }
     }
 
     public void joinGameAsGuest(String code) {
-        logic.showGameMessage("Oyuna bağlanılıyor: " + code);
+        GameLogic.getInstance().showGameMessage("Oyuna bağlanılıyor: " + code);
         new Thread(() -> {
             try {
                 Socket socket = new Socket(AddressConverter.codeToAddress(code), 12345);
                 this.activeSocket = socket;
 
                 SwingUtilities.invokeLater(() -> {
-                    logic.startGamePage();
+                    GameLogic.getInstance().startGamePage();
 
                     try {
                         listenOpponent(socket);
                     } catch (IOException e) {
-                        logic.showGameMessage("Oyun başlatılamadı: " + e.getMessage());
+                        GameLogic.getInstance().showGameMessage("Oyun başlatılamadı: " + e.getMessage());
                     }
                 });
             } catch (IOException e) {
-                SwingUtilities.invokeLater(() -> logic.showGameMessage("Oyuna bağlanılamadı: " + e.getMessage()));
+                SwingUtilities.invokeLater(() -> GameLogic.getInstance().showGameMessage("Oyuna bağlanılamadı: " + e.getMessage()));
             }
         }).start();
     }
@@ -115,18 +113,18 @@ public class Connection {
 
                     if(obj instanceof User user){
                         if(user.getRole()== Role.HOST){
-                            gameState.setOpponent(user);
+                            GameState.getInstance().setOpponent(user);
                         }else if(user.getRole()==Role.GUEST){
-                            gameState.setMe(user);
+                            GameState.getInstance().setMe(user);
                         }
                     }else{
                         String receivedMessage = (String) obj;
-                        logic.handleOpponentInput(receivedMessage);
+                        GameLogic.getInstance().handleOpponentInput(receivedMessage);
                     }
 
                 }
             } catch (Exception e) {
-                logic.showGameMessage("Rakibin bağlantısı koptu.");
+                GameLogic.getInstance().showGameMessage("Rakibin bağlantısı koptu.");
             }
         });
         listenerThread.setDaemon(true);
@@ -136,7 +134,7 @@ public class Connection {
     private void assignStreams(Socket socket) throws IOException {
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
-        logic.showGameMessage("Bağlantı başarılı oynayabilirsiniz");
+        GameLogic.getInstance().showGameMessage("Bağlantı başarılı oynayabilirsiniz");
     }
 
     public void sendMessage(String message) {
@@ -145,7 +143,7 @@ public class Connection {
                 out.writeObject(message);
                 out.flush();
             } catch (IOException e) {
-                logic.showGameMessage("Mesaj gönderilemedi:" + e.getMessage());
+                GameLogic.getInstance().showGameMessage("Mesaj gönderilemedi:" + e.getMessage());
             }
         }
     }
@@ -155,7 +153,7 @@ public class Connection {
             try{
                 out.writeObject(user);
             }catch (IOException e){
-                logic.showGameMessage("Bilgiler gönderilemedi:" + e.getMessage());
+                GameLogic.getInstance().showGameMessage("Bilgiler gönderilemedi:" + e.getMessage());
             }
         }
     }
@@ -169,7 +167,7 @@ public class Connection {
                 serverSocket.close();
             }
         } catch (IOException e) {
-            logic.showGameMessage("Bağlantılar kapatılırken hata oluştu: " + e.getMessage());
+            GameLogic.getInstance().showGameMessage("Bağlantılar kapatılırken hata oluştu: " + e.getMessage());
         }
     }
 }

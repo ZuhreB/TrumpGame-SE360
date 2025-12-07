@@ -8,10 +8,7 @@ import javax.swing.SwingUtilities;
 
 public class GameLogic {
 
-    private MainPageUI lobbyGui=MainPageUI.getInstance();
     private GamePageUI gameGui;
-    private Connection connection=Connection.getInstance();
-    private GameState gameState = GameState.getInstance();
 
     private static GameLogic instance = new GameLogic();
     public static GameLogic getInstance() {
@@ -21,49 +18,49 @@ public class GameLogic {
     private GameLogic() {}
 
     public void startMainPage() {
-        SwingUtilities.invokeLater(() -> lobbyGui.setVisible(true));
+        SwingUtilities.invokeLater(() -> MainPageUI.getInstance().setVisible(true));
     }
 
     public void startGamePage() {
-        if (lobbyGui != null) {
-            lobbyGui.dispose();
-            lobbyGui = null;
+        if (MainPageUI.getInstance() != null) {
+            MainPageUI.getInstance().dispose();
+            //lobbyGui = null;
         }
 
         this.gameGui = GamePageUI.getInstace();
     }
 
     public void joinGameAsHost(String nickname) {
-        gameState.getMe().setNickName(nickname);
-        gameState.getMe().setRole(Role.HOST);
-        connection.joinGameAsHost();
+        GameState.getInstance().getMe().setNickName(nickname);
+        GameState.getInstance().getMe().setRole(Role.HOST);
+        Connection.getInstance().joinGameAsHost();
     }
 
     public void joinGameAsGuest(String nickname,String code) {
-        gameState.getMe().setNickName(nickname);
-        gameState.getMe().setRole(Role.GUEST);
+        GameState.getInstance().getMe().setNickName(nickname);
+        GameState.getInstance().getMe().setRole(Role.GUEST);
         if (code != null && !code.trim().isEmpty()) {
-            connection.joinGameAsGuest(code);
+            Connection.getInstance().joinGameAsGuest(code);
         } else {
-            lobbyGui.showGuiMessage("Gecerli bir bağlantı adresi girilmedi.");
+            MainPageUI.getInstance().showGuiMessage("Gecerli bir bağlantı adresi girilmedi.");
         }
     }
 
     public void cancelHost() {
-        connection.cancelServer();
+        Connection.getInstance().cancelServer();
     }
 
     public void disconnect() {
-        connection.closeConnection();
+        Connection.getInstance().closeConnection();
         if (gameGui != null) {
             gameGui.dispose();
         }
     }
 
     public void sendMessage(String message) {
-        if (connection != null) {
+        if (Connection.getInstance() != null) {
             showGameMessage("Siz: " + message);
-            connection.sendMessage(message);
+            Connection.getInstance().sendMessage(message);
         }
     }
 
@@ -74,15 +71,15 @@ public class GameLogic {
     public void showGameMessage(String message) {
         if (gameGui != null) {
         } else {
-            lobbyGui.showGuiMessage(message);
+            MainPageUI.getInstance().showGuiMessage(message);
         }
     }
 
     public void showWaitingDialog(String ip) {
-        lobbyGui.showWaitingDialog(ip);
+        MainPageUI.getInstance().showWaitingDialog(ip);
     }
 
     public void closeWaitingDialog() {
-        lobbyGui.closeWaitingDialog();
+        MainPageUI.getInstance().closeWaitingDialog();
     }
 }

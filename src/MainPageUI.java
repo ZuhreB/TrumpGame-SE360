@@ -5,7 +5,6 @@ import java.awt.*;
 
 public class MainPageUI extends JFrame {
 
-    private GameLogic logic=GameLogic.getInstance();
     private static MainPageUI instance = new MainPageUI();
 
     private JTextField nicknameField;
@@ -21,7 +20,6 @@ public class MainPageUI extends JFrame {
 
     private MainPageUI() {
         super("Trump Game");
-        this.logic = logic;
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,14 +76,14 @@ public class MainPageUI extends JFrame {
         hostButton.addActionListener(e -> {
             String nickname = nicknameField.getText();
             setTitle("Trump Game - " + nickname + " (Oda Sahibi)");
-            logic.joinGameAsHost(nickname);
+            GameLogic.getInstance().joinGameAsHost(nickname);
         });
 
         joinButton.addActionListener(e -> {
             String nickname = nicknameField.getText();
             setTitle("Trump Game - " + nickname + " (Misafir)");
             String code = JOptionPane.showInputDialog(this, "Oyun kodunu girin:");
-            if (code != null) logic.joinGameAsGuest(nickname, code);
+            if (code != null) GameLogic.getInstance().joinGameAsGuest(nickname, code);
         });
 
         setVisible(true);
@@ -123,7 +121,7 @@ public class MainPageUI extends JFrame {
 
         JButton cancelButton = new JButton("İptal");
         cancelButton.addActionListener(e -> {
-            logic.cancelHost();
+            GameLogic.getInstance().cancelHost();
             waitingDialog.dispose();
         });
         waitingDialog.add(cancelButton, BorderLayout.SOUTH);

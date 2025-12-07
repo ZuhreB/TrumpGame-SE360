@@ -21,9 +21,6 @@ public class GamePageUI extends JFrame {
     private final Color BUTTON_COLOR = new Color(180, 60, 60);
     private final Color CARD_COLOR = new Color(200, 200, 200);
 
-    private GamePageLogic gamePageLogic = GamePageLogic.getInstance();
-    private GameLogic gameLogic= GameLogic.getInstance();
-    private GameState gameState = GameState.getInstance();
     Card card=new Card("src/cards/card_close.jpg","Lu",true,"");
     private static GamePageUI instace = new GamePageUI();
 
@@ -32,7 +29,7 @@ public class GamePageUI extends JFrame {
     private GamePageUI() {
         super("Trump Game - ");
 
-        gamePageLogic.init();
+        GamePageLogic.getInstance().init();
 
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -50,7 +47,7 @@ public class GamePageUI extends JFrame {
         exitButton.setForeground(Color.WHITE);
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> {
-            gameLogic.disconnect();
+            GameLogic.getInstance().disconnect();
             dispose();
         });
 
