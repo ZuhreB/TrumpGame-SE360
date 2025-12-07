@@ -32,22 +32,22 @@ public class GamePageLogic {
         ArrayList<Card> opponentBoardCards=new ArrayList<>();
         ArrayList<Card> myHandCards=new ArrayList<>();
         ArrayList<Card> opponentHandCards=new ArrayList<>();
-
-
-        for(int i=0;i<20;i++){
-            myBoardCards.add(allCards.remove(i));
-        }
+        System.out.println(allCards.size());
 
         for(int i=0;i<20;i++){
-            opponentBoardCards.add(allCards.remove(i));
+            myBoardCards.add(allCards.get(i));
         }
 
-        for(int i=0;i<6;i++){
-            myHandCards.add(allCards.remove(i));
+        for(int i=20;i<40;i++){
+            opponentBoardCards.add(allCards.get(i));
         }
 
-        for(int i=0;i<6;i++){
-            opponentBoardCards.add(allCards.remove(i));
+        for(int i=40;i<46;i++){
+            myHandCards.add(allCards.get(i));
+        }
+
+        for(int i=46;i<52;i++){
+            opponentBoardCards.add(allCards.get(i));
         }
 
         GameState.getInstance().getMe().setBoard_cards(myBoardCards);

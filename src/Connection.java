@@ -114,6 +114,10 @@ public class Connection {
                     if(obj instanceof User user){
                         if(user.getRole()== Role.HOST){
                             GameState.getInstance().setOpponent(user);
+                            System.out.println(user.getNickName());
+                            System.out.println(user.getRole());
+                            System.out.println(user.getBoard_cards());
+
                         }else if(user.getRole()==Role.GUEST){
                             GameState.getInstance().setMe(user);
                         }
