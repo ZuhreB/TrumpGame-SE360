@@ -148,7 +148,6 @@ public class Connection {
                             for(Card card:GameState.getInstance().getOpponent().getBoard_cards()){
                                 System.out.print(card.getNumber()+" "+card.getType()+" ");
                             }
-                            GamePageLogic.getInstance().initTrumpMoment();
                             System.out.println();
                         }else if(user.getRole()==Role.GUEST){
                             System.out.println("guest geldi");

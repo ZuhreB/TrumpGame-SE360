@@ -61,21 +61,10 @@ public class GamePageLogic {
 
     public void initTrumpMoment() {
         System.out.println("init trump momente girildi");
-        for(Card card: GameState.getInstance().getMe().getBoard_cards()){
-            System.out.print(card.isClose());
-        }
-        for(Card card: GameState.getInstance().getOpponent().getBoard_cards()){
-            System.out.print(card.isClose());
-        }
-        if (GameState.getInstance().getMe().getRole() == Role.GUEST) {
-            System.out.println("ben kartlarını açacak 5 adet");
 
+        if (GameState.getInstance().getMe()!=null&&GameState.getInstance().getMe().getRole() == Role.GUEST) {
             ArrayList<Card> myBoardCards = GameState.getInstance().getMe().getBoard_cards();
             if (myBoardCards != null && myBoardCards.size() >= 20) {
-                for (int i = 10; i < 15; i++) {
-                    System.out.println("kart açıldı");
-                    myBoardCards.get(i).setClose(false);
-                }
                 javax.swing.SwingUtilities.invokeLater(() -> {
                     GamePageUI.getInstace().refreshGrids();
                 });
@@ -96,6 +85,7 @@ public class GamePageLogic {
         for(Card card: GameState.getInstance().getMe().getBoard_cards()){
             System.out.print(card.isClose());
         }
+        System.out.println("-------------------");
         for(Card card: GameState.getInstance().getOpponent().getBoard_cards()){
             System.out.print(card.isClose());
         }
