@@ -1,6 +1,7 @@
 package src;
 
 import src.GameLogic;
+import src.Model.Card;
 import src.Model.GameState;
 import src.Model.Role;
 import src.Model.User;
@@ -10,6 +11,7 @@ import javax.swing.SwingUtilities;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -46,18 +48,21 @@ public class Connection {
                     this.activeSocket = clientSocket;
                     try {
                         assignStreams(clientSocket);
+
+                        SwingUtilities.invokeAndWait(() -> {
+                            GameLogic.getInstance().closeWaitingDialog();
+                            GameLogic.getInstance().startGamePage();
+                        });
+
                         listenOpponent(clientSocket);
                     } catch (IOException e) {
                         GameLogic.getInstance().showGameMessage("Oyun başlatılamadı: " + e.getMessage());
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
                     }
 
-
-                    SwingUtilities.invokeLater(() -> {
-                        GameLogic.getInstance().closeWaitingDialog();
-                        GameLogic.getInstance().startGamePage();
-
-
-                    });
 
                 } catch (SocketException e) {
                     SwingUtilities.invokeLater(() -> {
@@ -93,13 +98,20 @@ public class Connection {
                 this.activeSocket = socket;
                 try {
                     assignStreams(socket);
+
+                    SwingUtilities.invokeAndWait(() -> {
+                        GameLogic.getInstance().startGamePage();
+                    });
+
                     listenOpponent(socket);
                 } catch (IOException e) {
                     GameLogic.getInstance().showGameMessage("Oyun başlatılamadı: " + e.getMessage());
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException(e);
                 }
-                SwingUtilities.invokeLater(() -> {
-                    GameLogic.getInstance().startGamePage();
-                });
+
             } catch (IOException e) {
                 SwingUtilities.invokeLater(() -> GameLogic.getInstance().showGameMessage("Oyuna bağlanılamadı: " + e.getMessage()));
             }
@@ -112,9 +124,13 @@ public class Connection {
         Thread listenerThread = new Thread(() -> {
             try {
                 System.out.println(out);
+                System.out.println("a");
                 while (true) {
+                    System.out.println("b");
+
                     Object obj = in.readObject();
                     System.out.println("start");
+                    System.out.println("c");
 
                     if(obj instanceof User user){
                         System.out.println("ife girdi");
@@ -125,16 +141,18 @@ public class Connection {
                             GameState.getInstance().setOpponent(user);
                             System.out.println(user.getNickName());
                             System.out.println(user.getRole());
-                            System.out.println(user.getBoard_cards().toArray().toString());
-
+                            for(Card card:GameState.getInstance().getOpponent().getBoard_cards()){
+                                System.out.print(card.getNumber()+" "+card.getType()+" ");
+                            }
+                            System.out.println();
                         }else if(user.getRole()==Role.GUEST){
                             System.out.println("guest geldi");
                             System.out.println(user.getRole());
-                            System.out.println(user.getBoard_cards().toArray().toString());
-                            System.out.println(user.getHand_cards().toArray().toString());
-
-
                             GameState.getInstance().setMe(user);
+                            for(Card card:GameState.getInstance().getMe().getBoard_cards()){
+                                System.out.print(card.getNumber()+" "+card.getType()+" ");
+                            }
+                            System.out.println();
                         }
                     }else{
                         String receivedMessage = (String) obj;
@@ -175,9 +193,12 @@ public class Connection {
 
         if(out!=null){
             System.out.println("out null değil");
+
             try{
+                out.reset();
                 System.out.println("gönderiliyor"+user);
                 out.writeObject(user);
+                out.flush();
             }catch (IOException e){
                 GameLogic.getInstance().showGameMessage("Bilgiler gönderilemedi:" + e.getMessage());
             }

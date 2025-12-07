@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GamePageUI extends JFrame {
 
@@ -25,6 +26,9 @@ public class GamePageUI extends JFrame {
     private static GamePageUI instace = new GamePageUI();
 
 
+    //SONRADAN MÜDAHELE EDİLECEK PANELLER
+    JPanel bottomGrid;
+    JPanel topGrid;
 
     private GamePageUI() {
         super("Trump Game - ");
@@ -94,7 +98,7 @@ public class GamePageUI extends JFrame {
         centerPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         //center panel ve new Gridlayout arasındaki boşluk
 
-        JPanel topGrid = new JPanel(new GridLayout(2, 5, 10, 10));
+        topGrid = new JPanel(new GridLayout(2, 5, 10, 10));
         //burda da kartlar arası boşluklar ayarlanıyor
         topGrid.setBackground(BG_COLOR);
 
@@ -103,7 +107,7 @@ public class GamePageUI extends JFrame {
             topGrid.add(createCardPlaceholder(card,false));
         }
 
-        JPanel bottomGrid = new JPanel(new GridLayout(2, 5, 10, 10));
+        bottomGrid = new JPanel(new GridLayout(2, 5, 10, 10));
         bottomGrid.setBackground(BG_COLOR);
 
         for (int i = 0; i < 10; i++) {
@@ -158,6 +162,34 @@ public class GamePageUI extends JFrame {
         cardPanel.add(label, BorderLayout.CENTER);
         return cardPanel;
     }
+
+    public void refreshGrids() {
+        bottomGrid.removeAll();
+        ArrayList<Card> myBoardCards = GameState.getInstance().getMe().getBoard_cards();
+
+        if (myBoardCards != null && myBoardCards.size() >= 20) {
+            for (int i = 10; i < 20; i++) {
+                bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false));
+            }
+        }
+
+        bottomGrid.revalidate();
+        bottomGrid.repaint();
+
+        topGrid.removeAll();
+        ArrayList<Card> myOpponentBoardCards = GameState.getInstance().getOpponent().getBoard_cards();
+
+        if (myOpponentBoardCards != null && myOpponentBoardCards.size() >= 20) {
+            for (int i = 10; i < 20; i++) {
+                topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false));
+            }
+        }
+
+        topGrid.revalidate();
+        topGrid.repaint();
+
+    }
+
 
     public static GamePageUI getInstace() {
         return instace;

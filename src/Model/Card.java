@@ -37,7 +37,7 @@ public class Card implements Serializable {
 
                 // Create a new Card object and add it to the deck.
                 // All cards are initialized face-up (isClose = false).
-                allCards.add(new Card(imagePath, number, false, type));
+                allCards.add(new Card(imagePath, number, true, type));
             }
         }
     }
@@ -69,5 +69,13 @@ public class Card implements Serializable {
     public static ArrayList<Card> getAllCards() {
 
         return allCards;
+    }
+
+    public void setClose(boolean close) {
+        isClose = close;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }
