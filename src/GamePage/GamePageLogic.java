@@ -15,16 +15,19 @@ public class GamePageLogic {
         return instance;
     }
 
-    public void init(){
-        if(GameState.getInstance().getMe().getRole()== Role.HOST){
+   public void startHostGame(){
+        if(GameState.getInstance().getMe().getRole() == Role.HOST){
             Card.initAllCards();
             Card.shuffleAllCards();
             giveCardsToTheUser();
+
+            initTrumpMoment();
+
             Connection.getInstance().sendUserObject(GameState.getInstance().getMe());
             Connection.getInstance().sendUserObject(GameState.getInstance().getOpponent());
-            initTrumpMoment();
         }
     }
+
 
     private void giveCardsToTheUser(){
         ArrayList<Card> allCards=Card.getAllCards();

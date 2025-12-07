@@ -131,8 +131,6 @@ public class GamePageUI extends JFrame {
         }
 
         add(eastPanel, BorderLayout.EAST);
-        GamePageLogic.getInstance().init();
-
         setVisible(true);
     }
 

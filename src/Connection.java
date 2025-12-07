@@ -1,6 +1,7 @@
 package src;
 
 import src.GameLogic;
+import src.GamePage.GamePageLogic;
 import src.Model.Card;
 import src.Model.GameState;
 import src.Model.Role;
@@ -49,10 +50,13 @@ public class Connection {
                     try {
                         assignStreams(clientSocket);
 
+
                         SwingUtilities.invokeAndWait(() -> {
                             GameLogic.getInstance().closeWaitingDialog();
                             GameLogic.getInstance().startGamePage();
                         });
+
+                        GamePageLogic.getInstance().startHostGame();
 
                         listenOpponent(clientSocket);
                     } catch (IOException e) {
@@ -104,6 +108,7 @@ public class Connection {
                     });
 
                     listenOpponent(socket);
+
                 } catch (IOException e) {
                     GameLogic.getInstance().showGameMessage("Oyun başlatılamadı: " + e.getMessage());
                 } catch (InterruptedException e) {
@@ -137,13 +142,13 @@ public class Connection {
 
                         if(user.getRole()== Role.HOST){
                             System.out.println("host geldi");
-
                             GameState.getInstance().setOpponent(user);
                             System.out.println(user.getNickName());
                             System.out.println(user.getRole());
                             for(Card card:GameState.getInstance().getOpponent().getBoard_cards()){
                                 System.out.print(card.getNumber()+" "+card.getType()+" ");
                             }
+                            GamePageLogic.getInstance().initTrumpMoment();
                             System.out.println();
                         }else if(user.getRole()==Role.GUEST){
                             System.out.println("guest geldi");
@@ -152,6 +157,7 @@ public class Connection {
                             for(Card card:GameState.getInstance().getMe().getBoard_cards()){
                                 System.out.print(card.getNumber()+" "+card.getType()+" ");
                             }
+                            GamePageLogic.getInstance().initTrumpMoment();
                             System.out.println();
                         }
                     }else{
