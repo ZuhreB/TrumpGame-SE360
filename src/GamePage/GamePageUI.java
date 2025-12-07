@@ -28,10 +28,7 @@ public class GamePageUI extends JFrame {
 
     private GamePageUI() {
         super("Trump Game - ");
-
-        GamePageLogic.getInstance().init();
-
-
+        System.out.println("game page ui constructoru başlatıldı");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -130,6 +127,7 @@ public class GamePageUI extends JFrame {
         }
 
         add(eastPanel, BorderLayout.EAST);
+        GamePageLogic.getInstance().init();
 
         setVisible(true);
     }

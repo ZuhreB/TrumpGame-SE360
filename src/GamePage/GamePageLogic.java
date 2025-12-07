@@ -16,7 +16,6 @@ public class GamePageLogic {
     }
 
     public void init(){
-
         if(GameState.getInstance().getMe().getRole()== Role.HOST){
             Card.initAllCards();
             Card.shuffleAllCards();
