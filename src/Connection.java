@@ -2,6 +2,7 @@ package src;
 
 import src.GameLogic;
 import src.GamePage.GamePageLogic;
+import src.GamePage.GamePageUI;
 import src.Model.Card;
 import src.Model.GameState;
 import src.Model.Role;
@@ -166,8 +167,10 @@ public class Connection {
                             String trumpInfo = receivedMessage.split(":")[1];
                             GameState.getInstance().setSecilen_trump(trumpInfo);
                             System.out.println("Rakip kozu belirledi: " + trumpInfo);
-
                             GameLogic.getInstance().showGameMessage("Koz belirlendi: " + trumpInfo);
+                            GameState.getInstance().makeAllCardsVisible();
+
+                            GamePageUI.getInstace().refreshGrids();
                         } else {
                             GameLogic.getInstance().handleOpponentInput(receivedMessage);
 

@@ -67,6 +67,8 @@ public class GamePageLogic {
             if (myBoardCards != null && myBoardCards.size() >= 20) {
                 javax.swing.SwingUtilities.invokeLater(() -> {
                     GamePageUI.getInstace().refreshGrids();
+                    askForTrump();
+
                 });
             }
             /// FONKSİYON BURAYA GELECEK.
@@ -78,7 +80,6 @@ public class GamePageLogic {
                 }
                 javax.swing.SwingUtilities.invokeLater(() -> {
                     GamePageUI.getInstace().refreshGrids();
-                    askForTrump();
                 });
             }
         }
@@ -114,7 +115,7 @@ public class GamePageLogic {
         System.out.println("Koz:"+selectedTrump);
         GameState.getInstance().setSecilen_trump(selectedTrump);
         Connection.getInstance().sendMessage("Koz:" + selectedTrump);
-        GameState.getInstance().getInstance().changeVisibility();
+        GameState.getInstance().getInstance().makeAllCardsVisible();
         GamePageUI.getInstace().refreshGrids();
     }
 

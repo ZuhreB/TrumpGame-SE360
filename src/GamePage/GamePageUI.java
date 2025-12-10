@@ -189,11 +189,18 @@ public class GamePageUI extends JFrame {
         ArrayList<Card> myOpponentBoardCards = GameState.getInstance().getOpponent().getBoard_cards();
 
         if (myOpponentBoardCards != null && myOpponentBoardCards.size() >= 20) {
-            // Rakip kartları her zaman düz (veya isteğe göre ters) basılabilir.
-            // Genelde rakip kartları standart (10-19) bırakılır.
-            for (int i = 10; i < 20; i++) {
-                topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false));
+            if(myRole==Role.GUEST){
+                for (int i = 19; i > 9; i--) {
+                    topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false));
+                }
+            }else{
+                // Rakip kartları her zaman düz (veya isteğe göre ters) basılabilir.
+                // Genelde rakip kartları standart (10-19) bırakılır.
+                for (int i = 10; i < 20; i++) {
+                    topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false));
+                }
             }
+
         }
 
         topGrid.revalidate();

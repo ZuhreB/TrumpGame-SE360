@@ -36,7 +36,7 @@ public class GameState {
         return instance;
     }
 
-    public void changeVisibility(){
+    public void makeAllCardsVisible(){
         for(int i=0;i<me.board_cards.size();i++){
             me.board_cards.get(i).setClose(false);
             opponent.board_cards.get(i).setClose(false);
