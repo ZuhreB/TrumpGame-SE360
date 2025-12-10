@@ -169,6 +169,7 @@ public class GamePageUI extends JFrame {
 
         cardPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
+                if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.WAIT) return;
                 if (selectedCardPanel != null) {
                     selectedCardPanel.setBorder(null);
                 }
