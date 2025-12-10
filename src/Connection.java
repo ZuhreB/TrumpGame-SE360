@@ -169,10 +169,12 @@ public class Connection {
                 GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY_BACK);
                 Card card= (Card)map.get(MessageType.PLAYED);
                 System.out.println(card.getNumber()+" "+card.getType());
+                SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(card));
             }else if(map.containsKey(MessageType.PLAYED_BACK)){
                 GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
                 Card card= (Card)map.get(MessageType.PLAYED_BACK);
                 System.out.println(card.getNumber()+" "+card.getType());
+                SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(card));
 
             }
 

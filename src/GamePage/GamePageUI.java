@@ -20,6 +20,9 @@ public class GamePageUI extends JFrame {
     private final Color TEXT_COLOR = new Color(230, 230, 230);
     private final Color BUTTON_COLOR = new Color(180, 60, 60);
     private final Color CARD_COLOR = new Color(200, 200, 200);
+    private final Color HIGHLIGHT_COLOR = new Color(255, 215, 0);
+    private JPanel selectedCardPanel = null; // Hangi kartın seçili olduğunu tutar
+    private JPanel opponentSelectedCardPanel = null; // Rakibin seçtiği kartı tutar
 
     Card card=new Card("src/cards/card_close.jpg","Lu",true,"");
     private static GamePageUI instace = new GamePageUI();
@@ -142,6 +145,8 @@ public class GamePageUI extends JFrame {
     private JPanel createCardPlaceholder(Card card,boolean isRightCard) {
         JPanel cardPanel = new JPanel(new BorderLayout());
         cardPanel.setBackground(CARD_COLOR);
+        //Kart paneliyle card objesi arasında bağıntı
+        cardPanel.putClientProperty("card", card);
         cardPanel.setOpaque(false);
 
         // Card sınıfındaki static adresi kullanarak resmi yükle
@@ -164,6 +169,12 @@ public class GamePageUI extends JFrame {
 
         cardPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (selectedCardPanel != null) {
+                    selectedCardPanel.setBorder(null);
+                }
+                selectedCardPanel = cardPanel;
+                cardPanel.setBorder(BorderFactory.createLineBorder(HIGHLIGHT_COLOR, 4));
+
                 GamePageLogic.getInstance().controlSendingCard(card);
             }
         });
@@ -225,6 +236,25 @@ public class GamePageUI extends JFrame {
         }
         westPanel.revalidate();
         westPanel.repaint();
+    }
+
+    // Rakibin oynadığı kartı topGrid'de bulup etrafına ışık (çerçeve) ekler
+    public void highlightOpponentCard(Card card) {
+        if (opponentSelectedCardPanel != null) {
+            opponentSelectedCardPanel.setBorder(null);
+        }
+        // TopGrid içindeki tüm panelleri gez ve bulduğun kartı yak
+        for (Component component : topGrid.getComponents()) {
+            if (component instanceof JPanel) {
+                JPanel panel = (JPanel) component;
+                Card c = (Card) panel.getClientProperty("card");
+                if (c != null && c.getNumber().equals(card.getNumber()) && c.getType().equals(card.getType())) {
+                    opponentSelectedCardPanel = panel;
+                    panel.setBorder(BorderFactory.createLineBorder(HIGHLIGHT_COLOR, 4));
+                    break;
+                }
+            }
+        }
     }
 
     public static GamePageUI getInstace() {
