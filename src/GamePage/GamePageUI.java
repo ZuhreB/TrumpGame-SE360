@@ -16,6 +16,7 @@ public class GamePageUI extends JFrame {
 
     private JLabel myScoreLabel;
     private JLabel opponentScoreLabel;
+    private JLabel playFlowLabel;
 
     private final Color BG_COLOR = new Color(40, 44, 52);
     private final Color PANEL_COLOR = new Color(60, 63, 65);
@@ -68,7 +69,6 @@ public class GamePageUI extends JFrame {
         westPanel.setPreferredSize(new Dimension(200, 0));
         westPanel.setBorder(new EmptyBorder(20, 20, 20, 20));//kenarlara uzaklık ekliyor
 
-
         JLabel infoTitle = new JLabel("SKOR TABLOSU");
         infoTitle.setFont(new Font("Arial", Font.BOLD, 18));
         infoTitle.setForeground(Color.WHITE);
@@ -84,11 +84,14 @@ public class GamePageUI extends JFrame {
         opponentScoreLabel.setForeground(TEXT_COLOR);
         opponentScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        String play_flow =GameState.getInstance().getPlayFlow().toString();
+        JLabel playFlowLabel= new JLabel(play_flow);
         westPanel.add(infoTitle);
         westPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         westPanel.add(myScoreLabel);
         westPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         westPanel.add(opponentScoreLabel);
+        westPanel.add(playFlowLabel);
         westPanel.add(Box.createVerticalGlue());
 
         add(westPanel, BorderLayout.WEST);
@@ -211,8 +214,21 @@ public class GamePageUI extends JFrame {
         topGrid.revalidate();
         topGrid.repaint();
     }
+    public void refreshWest(){
+        if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY){
+            playFlowLabel.setText("Oynama sırası sende");
+        }else if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY_BACK){
+            playFlowLabel.setText("Karşı oynama sırası sende");
+        }else if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.WAIT){
+            playFlowLabel.setText("Bekleniyor...");
+        }
+        westPanel.revalidate();
+        westPanel.repaint();
+    }
 
     public static GamePageUI getInstace() {
         return instace;
     }
+
+
 }

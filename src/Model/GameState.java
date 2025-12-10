@@ -1,5 +1,7 @@
 package src.Model;
 
+import src.GamePage.GamePageUI;
+
 public class GameState {
     User me = new User();
      User opponent = new User();
@@ -51,5 +53,6 @@ public class GameState {
 
     public void setPlayFlow(PLAY_FLOW playFlow) {
         this.playFlow = playFlow;
+        GamePageUI.getInstace().refreshWest();
     }
 }
