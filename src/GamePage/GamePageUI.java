@@ -6,17 +6,14 @@ import src.Model.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class GamePageUI extends JFrame {
 
     private JLabel myScoreLabel;
     private JLabel opponentScoreLabel;
-    private JLabel playFlowLabel;
+    JLabel playFlowLabel= new JLabel();
 
     private final Color BG_COLOR = new Color(40, 44, 52);
     private final Color PANEL_COLOR = new Color(60, 63, 65);
@@ -84,13 +81,17 @@ public class GamePageUI extends JFrame {
         opponentScoreLabel.setForeground(TEXT_COLOR);
         opponentScoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        String play_flow =GameState.getInstance().getPlayFlow().toString();
-        JLabel playFlowLabel= new JLabel(play_flow);
+        playFlowLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        playFlowLabel.setForeground(TEXT_COLOR);
+        playFlowLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+
         westPanel.add(infoTitle);
         westPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         westPanel.add(myScoreLabel);
         westPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         westPanel.add(opponentScoreLabel);
+        westPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         westPanel.add(playFlowLabel);
         westPanel.add(Box.createVerticalGlue());
 
