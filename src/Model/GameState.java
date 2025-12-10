@@ -1,17 +1,10 @@
 package src.Model;
 
 public class GameState {
-    public String getSecilen_trump() {
-        return secilen_trump;
-    }
-
-    public void setSecilen_trump(String secilen_trump) {
-        this.secilen_trump = secilen_trump;
-    }
-
     User me = new User();
      User opponent = new User();
      private String secilen_trump;
+     private PLAY_FLOW playFlow;
      private static GameState instance= new GameState();
 
      private GameState(){}
@@ -36,10 +29,27 @@ public class GameState {
         return instance;
     }
 
+    public String getSecilen_trump() {
+        return secilen_trump;
+    }
+
+
+    public void setSecilen_trump(String secilen_trump) {
+        this.secilen_trump = secilen_trump;
+    }
+
     public void makeAllCardsVisible(){
         for(int i=0;i<me.board_cards.size();i++){
             me.board_cards.get(i).setClose(false);
             opponent.board_cards.get(i).setClose(false);
         }
+    }
+
+    public PLAY_FLOW getPlayFlow() {
+        return playFlow;
+    }
+
+    public void setPlayFlow(PLAY_FLOW playFlow) {
+        this.playFlow = playFlow;
     }
 }

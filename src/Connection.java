@@ -3,10 +3,7 @@ package src;
 import src.GameLogic;
 import src.GamePage.GamePageLogic;
 import src.GamePage.GamePageUI;
-import src.Model.Card;
-import src.Model.GameState;
-import src.Model.Role;
-import src.Model.User;
+import src.Model.*;
 import src.utils.AddressConverter;
 
 import javax.swing.SwingUtilities;
@@ -18,6 +15,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.HashMap;
 
 public class Connection {
 
@@ -125,64 +123,60 @@ public class Connection {
     }
 
     private void listenOpponent(Socket socket) throws IOException {
-        System.out.println("assign bitti");
 
         Thread listenerThread = new Thread(() -> {
             try {
                 System.out.println(out);
-                System.out.println("a");
                 while (true) {
-                    System.out.println("b");
-
                     Object obj = in.readObject();
-                    System.out.println("start");
-                    System.out.println("c");
-
-                    if(obj instanceof User user){
-                        System.out.println("ife girdi");
-
-                        if(user.getRole()== Role.HOST){
-                            System.out.println("host geldi");
-                            GameState.getInstance().setOpponent(user);
-                            System.out.println(user.getNickName());
-                            System.out.println(user.getRole());
-                            for(Card card:GameState.getInstance().getOpponent().getBoard_cards()){
-                                System.out.print(card.getNumber()+" "+card.getType()+" ");
-                            }
-                            System.out.println();
-                        }else if(user.getRole()==Role.GUEST){
-                            System.out.println("guest geldi");
-                            System.out.println(user.getRole());
-                            GameState.getInstance().setMe(user);
-                            for(Card card:GameState.getInstance().getMe().getBoard_cards()){
-                                System.out.print(card.getNumber()+" "+card.getType()+" ");
-                            }
-                            GamePageLogic.getInstance().initTrumpMoment();
-                            System.out.println();
-                        }
-                    }else {
-                        String receivedMessage = (String) obj;
-                        System.out.println(receivedMessage);
-                        if (receivedMessage.startsWith("Koz:")) {
-                            String trumpInfo = receivedMessage.split(":")[1];
-                            GameState.getInstance().setSecilen_trump(trumpInfo);
-                            System.out.println("Rakip kozu belirledi: " + trumpInfo);
-                            GameLogic.getInstance().showGameMessage("Koz belirlendi: " + trumpInfo);
-                            GameState.getInstance().makeAllCardsVisible();
-
-                            GamePageUI.getInstace().refreshGrids();
-                        } else {
-                            GameLogic.getInstance().handleOpponentInput(receivedMessage);
-
-                        }
-                    }
+                    controlMessage(obj);
                 }
+
             } catch (Exception e) {
                 GameLogic.getInstance().showGameMessage("Rakibin bağlantısı koptu.");
             }
         });
         listenerThread.setDaemon(true);
         listenerThread.start();
+    }
+
+    public void controlMessage(Object obj){
+        if(obj instanceof User user){
+            if(user.getRole()== Role.HOST){
+                GameState.getInstance().setOpponent(user);
+                for(Card card:GameState.getInstance().getOpponent().getBoard_cards()){
+                    System.out.print(card.getNumber()+" "+card.getType()+" ");
+                }
+                System.out.println();
+            }else if(user.getRole()==Role.GUEST){
+                GameState.getInstance().setMe(user);
+                for(Card card:GameState.getInstance().getMe().getBoard_cards()){
+                    System.out.print(card.getNumber()+" "+card.getType()+" ");
+                }
+                GamePageLogic.getInstance().initTrumpMoment();
+            }
+        }else if(obj instanceof HashMap<?,?> map){
+            if(map.containsKey(MessageType.TRUMP)){
+
+               String trump= (String)map.get(MessageType.TRUMP);
+                GameState.getInstance().setSecilen_trump(trump);
+                GameLogic.getInstance().showGameMessage("Koz belirlendi: " + trump);
+                GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
+                GameState.getInstance().makeAllCardsVisible();
+                GamePageUI.getInstace().refreshGrids();
+
+            }else if(map.containsKey(MessageType.PLAYED)){
+                GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY_BACK);
+                Card card= (Card)map.get(MessageType.PLAYED);
+                System.out.println(card.getNumber()+" "+card.getType());
+            }else if(map.containsKey(MessageType.PLAYED_BACK)){
+                GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
+                Card card= (Card)map.get(MessageType.PLAYED_BACK);
+                System.out.println(card.getNumber()+" "+card.getType());
+
+            }
+
+        }
     }
 
     private void assignStreams(Socket socket) throws IOException {
@@ -204,21 +198,24 @@ public class Connection {
         }
     }
 
-    public void sendUserObject(User user){
-        System.out.println("send user objecte girdi");
-
+    public <T> void  sendObject(T obj){
         if(out!=null){
             System.out.println("out null değil");
-
             try{
                 out.reset();
-                System.out.println("gönderiliyor"+user);
-                out.writeObject(user);
+                System.out.println("gönderiliyor"+obj.toString());
+                out.writeObject(obj);
                 out.flush();
             }catch (IOException e){
                 GameLogic.getInstance().showGameMessage("Bilgiler gönderilemedi:" + e.getMessage());
             }
         }
+    }
+
+    public <T> void makeMapAndSend(MessageType type, T obj){
+        HashMap<MessageType,T> messageMap= new HashMap<>();
+        messageMap.put(type,obj);
+        sendObject(messageMap);
     }
 
     public void closeConnection() {

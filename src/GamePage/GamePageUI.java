@@ -1,15 +1,15 @@
 package src.GamePage;
 
+import src.Connection;
 import src.GameLogic;
-import src.Model.Card;
-import src.Model.GameState;
-import src.Model.Role;
-import src.Model.User;
+import src.Model.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class GamePageUI extends JFrame {
@@ -158,6 +158,11 @@ public class GamePageUI extends JFrame {
         // Label'ı artık text ile değil, icon ile oluşturuyoruz
         JLabel label = new JLabel(imageIcon);
 
+        cardPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                GamePageLogic.getInstance().controlSendingCard(card);
+            }
+        });
         cardPanel.add(label, BorderLayout.CENTER);
         return cardPanel;
     }

@@ -1,9 +1,8 @@
 package src.GamePage;
 
 import src.Connection;
-import src.Model.Card;
-import src.Model.GameState;
-import src.Model.Role;
+import src.GameLogic;
+import src.Model.*;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -24,11 +23,10 @@ public class GamePageLogic {
 
             initTrumpMoment();
 
-            Connection.getInstance().sendUserObject(GameState.getInstance().getMe());
-            Connection.getInstance().sendUserObject(GameState.getInstance().getOpponent());
+            Connection.getInstance().sendObject(GameState.getInstance().getMe());
+            Connection.getInstance().sendObject(GameState.getInstance().getOpponent());
         }
     }
-
 
     private void giveCardsToTheUser(){
         ArrayList<Card> allCards=Card.getAllCards();
@@ -59,7 +57,6 @@ public class GamePageLogic {
         GameState.getInstance().getOpponent().setBoard_cards(opponentBoardCards);
         GameState.getInstance().getOpponent().setHand_cards(opponentHandCards);
     }
-
 
     public void initTrumpMoment() {
         if (GameState.getInstance().getMe()!=null&&GameState.getInstance().getMe().getRole() == Role.GUEST) {
@@ -114,9 +111,22 @@ public class GamePageLogic {
         }
         System.out.println("Koz:"+selectedTrump);
         GameState.getInstance().setSecilen_trump(selectedTrump);
-        Connection.getInstance().sendMessage("Koz:" + selectedTrump);
+        Connection.getInstance().makeMapAndSend(MessageType.TRUMP,selectedTrump);
+        GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY);
         GameState.getInstance().getInstance().makeAllCardsVisible();
         GamePageUI.getInstace().refreshGrids();
+    }
+
+    public void controlSendingCard(Card card){
+        if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.WAIT){
+            GameLogic.getInstance().showGameMessage("YOU CAN NOT PLAY NOW WAIT");
+        }else if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY){
+            Connection.getInstance().makeMapAndSend(MessageType.PLAYED,card);
+            GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
+        }else if (GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY_BACK){
+            Connection.getInstance().makeMapAndSend(MessageType.PLAYED_BACK,card);
+            GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
+        }
     }
 
 }
