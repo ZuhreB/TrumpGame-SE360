@@ -112,14 +112,14 @@ public class GamePageUI extends JFrame {
 
 
         for (int i = 0; i < 10; i++) {
-            topGrid.add(createCardPlaceholder(card,false));
+            topGrid.add(createCardPlaceholder(card,false,true));
         }
 
         bottomGrid = new JPanel(new GridLayout(2, 5, 10, 10));
         bottomGrid.setBackground(BG_COLOR);
 
         for (int i = 0; i < 10; i++) {
-            bottomGrid.add(createCardPlaceholder(card,false));
+            bottomGrid.add(createCardPlaceholder(card,false,false));
         }
 
         centerPanel.add(topGrid);
@@ -133,7 +133,7 @@ public class GamePageUI extends JFrame {
         eastPanel.setBorder(new EmptyBorder(3, 10, 3, 10));
 
         for (int i = 0; i < 6; i++) {
-            JPanel cards = createCardPlaceholder(card,true);
+            JPanel cards = createCardPlaceholder(card,true,false);
             cards.setBackground(new Color(100, 149, 237));
             eastPanel.add(cards);
         }
@@ -142,7 +142,7 @@ public class GamePageUI extends JFrame {
         setVisible(true);
     }
 
-    private JPanel createCardPlaceholder(Card card,boolean isRightCard) {
+    private JPanel createCardPlaceholder(Card card,boolean isRightCard, boolean isTopGrid) {
         JPanel cardPanel = new JPanel(new BorderLayout());
         cardPanel.setBackground(CARD_COLOR);
         //Kart paneliyle card objesi arasında bağıntı
@@ -167,18 +167,21 @@ public class GamePageUI extends JFrame {
         // Label'ı artık text ile değil, icon ile oluşturuyoruz
         JLabel label = new JLabel(imageIcon);
 
-        cardPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.WAIT) return;
-                if (selectedCardPanel != null) {
-                    selectedCardPanel.setBorder(null);
-                }
-                selectedCardPanel = cardPanel;
-                cardPanel.setBorder(BorderFactory.createLineBorder(HIGHLIGHT_COLOR, 4));
+        if(!isTopGrid){
+            cardPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.WAIT) return;
+                    if (selectedCardPanel != null) {
+                        selectedCardPanel.setBorder(null);
+                    }
+                    selectedCardPanel = cardPanel;
+                    cardPanel.setBorder(BorderFactory.createLineBorder(HIGHLIGHT_COLOR, 4));
 
-                GamePageLogic.getInstance().controlSendingCard(card);
-            }
-        });
+                    GamePageLogic.getInstance().controlSendingCard(card);
+                }
+            });
+        }
+
         cardPanel.add(label, BorderLayout.CENTER);
         return cardPanel;
     }
@@ -193,11 +196,11 @@ public class GamePageUI extends JFrame {
 
             if (myRole == Role.GUEST) {
                 for (int i = 19; i >= 10; i--) {
-                    bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false));
+                    bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false,false));
                 }
             } else {
                 for (int i = 10; i < 20; i++) {
-                    bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false));
+                    bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false,false));
                 }
             }
         }
@@ -212,13 +215,13 @@ public class GamePageUI extends JFrame {
         if (myOpponentBoardCards != null && myOpponentBoardCards.size() >= 20) {
             if(myRole==Role.GUEST){
                 for (int i = 19; i > 9; i--) {
-                    topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false));
+                    topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false,true));
                 }
             }else{
                 // Rakip kartları her zaman düz (veya isteğe göre ters) basılabilir.
                 // Genelde rakip kartları standart (10-19) bırakılır.
                 for (int i = 10; i < 20; i++) {
-                    topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false));
+                    topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false,true));
                 }
             }
 
