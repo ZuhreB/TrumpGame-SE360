@@ -159,12 +159,20 @@ public class Connection {
                             GamePageLogic.getInstance().initTrumpMoment();
                             System.out.println();
                         }
-                    }else{
+                    }else {
                         String receivedMessage = (String) obj;
                         System.out.println(receivedMessage);
-                        GameLogic.getInstance().handleOpponentInput(receivedMessage);
-                    }
+                        if (receivedMessage.startsWith("Koz:")) {
+                            String trumpInfo = receivedMessage.split(":")[1];
+                            GameState.getInstance().setSecilen_trump(trumpInfo);
+                            System.out.println("Rakip kozu belirledi: " + trumpInfo);
 
+                            GameLogic.getInstance().showGameMessage("Koz belirlendi: " + trumpInfo);
+                        } else {
+                            GameLogic.getInstance().handleOpponentInput(receivedMessage);
+
+                        }
+                    }
                 }
             } catch (Exception e) {
                 GameLogic.getInstance().showGameMessage("Rakibin bağlantısı koptu.");

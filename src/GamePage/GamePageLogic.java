@@ -5,6 +5,7 @@ import src.Model.Card;
 import src.Model.GameState;
 import src.Model.Role;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class GamePageLogic {
@@ -59,6 +60,7 @@ public class GamePageLogic {
         GameState.getInstance().getOpponent().setHand_cards(opponentHandCards);
     }
 
+
     public void initTrumpMoment() {
         if (GameState.getInstance().getMe()!=null&&GameState.getInstance().getMe().getRole() == Role.GUEST) {
             ArrayList<Card> myBoardCards = GameState.getInstance().getMe().getBoard_cards();
@@ -76,6 +78,7 @@ public class GamePageLogic {
                 }
                 javax.swing.SwingUtilities.invokeLater(() -> {
                     GamePageUI.getInstace().refreshGrids();
+                    askForTrump();
                 });
             }
         }
@@ -86,6 +89,33 @@ public class GamePageLogic {
         for(Card card: GameState.getInstance().getOpponent().getBoard_cards()){
             System.out.print(card.isClose());
         }
+    }
+
+    private void askForTrump(){
+        String [] options ={"Maça","Kupa","Sinek","Karo"};
+        int choice = JOptionPane.showOptionDialog(
+                null,
+                "Kozu seçiniz",
+                "Koz Belirleme",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+        String selectedTrump = "";
+        switch (choice) {
+            case 0: selectedTrump = "spades"; break;
+            case 1: selectedTrump = "hearts"; break;
+            case 2: selectedTrump = "clubs"; break;
+            case 3: selectedTrump = "diamonds"; break;
+            default: selectedTrump = "spades"; // bu varsayılan olcak hiç bişi seçmeden kapatırsa diye
+        }
+        System.out.println("Koz:"+selectedTrump);
+        GameState.getInstance().setSecilen_trump(selectedTrump);
+        Connection.getInstance().sendMessage("Koz:" + selectedTrump);
+        GameState.getInstance().getInstance().changeVisibility();
+        GamePageUI.getInstace().refreshGrids();
     }
 
 }

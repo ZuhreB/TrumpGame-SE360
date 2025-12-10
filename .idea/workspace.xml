@@ -5,91 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="937f86de-abb2-4247-a904-009b156cd906" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/GamePage/GamePageUI.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/Main.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/MainPageUI.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/10_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/10_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/10_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/10_of_spades.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/2_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/2_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/2_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/2_of_spades.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/3_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/3_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/3_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/3_of_spades.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/4_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/4_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/4_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/4_of_spades.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/5_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/5_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/5_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/5_of_spades.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/6_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/6_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/6_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/6_of_spades.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/7_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/7_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/7_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/7_of_spades.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/8_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/8_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/8_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/8_of_spades.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/9_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/9_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/9_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/9_of_spades.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/ace_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/ace_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/ace_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/ace_of_spades.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/utils/AddressConverter.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/GamePage/GamePageLogic.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Model/Card.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Model/GameState.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Model/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/card_close.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/jack_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/jack_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/jack_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/jack_of_spades.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/king_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/king_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/king_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/king_of_spades.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/queen_of_clubs.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/queen_of_diamonds.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/queen_of_hearts.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cards/queen_of_spades.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TrumpGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TrumpGame/aciklama.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TrumpGame/src/Connection.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/Connection.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TrumpGame/src/GameLogic.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/GameLogic.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TrumpGame/src/GameUI.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Connection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameLogic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GamePageUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GamePage/GamePageUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainPageUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/black_joker.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/black_joker.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/jack_of_clubs2.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/jack_of_clubs2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/jack_of_diamonds2.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/jack_of_diamonds2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/jack_of_hearts2.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/jack_of_hearts2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/jack_of_spades2.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/jack_of_spades2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/king_of_clubs2.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/king_of_clubs2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/king_of_diamonds2.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/king_of_diamonds2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/king_of_hearts2.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/king_of_hearts2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/king_of_spades2.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/king_of_spades2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/queen_of_clubs2.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/queen_of_clubs2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/queen_of_diamonds2.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/queen_of_diamonds2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/queen_of_hearts2.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/queen_of_hearts2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/queen_of_spades2.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/queen_of_spades2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cards/red_joker.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/cards/red_joker.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GamePage/GamePageLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GamePage/GamePageLogic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Model/GameState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/GameState.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

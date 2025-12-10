@@ -1,8 +1,17 @@
 package src.Model;
 
 public class GameState {
-     User me = new User();
+    public String getSecilen_trump() {
+        return secilen_trump;
+    }
+
+    public void setSecilen_trump(String secilen_trump) {
+        this.secilen_trump = secilen_trump;
+    }
+
+    User me = new User();
      User opponent = new User();
+     private String secilen_trump;
      private static GameState instance= new GameState();
 
      private GameState(){}
@@ -25,5 +34,12 @@ public class GameState {
 
     public static GameState getInstance() {
         return instance;
+    }
+
+    public void changeVisibility(){
+        for(int i=0;i<me.board_cards.size();i++){
+            me.board_cards.get(i).setClose(false);
+            opponent.board_cards.get(i).setClose(false);
+        }
     }
 }
