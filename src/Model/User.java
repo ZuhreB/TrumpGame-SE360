@@ -7,9 +7,9 @@ public class User implements Serializable {
     String nickName;
     int score;
     Role role;
-    ArrayList<Card> board_cards;
-    ArrayList<Card> hand_cards;
-    ArrayList<Card> taken_cards;
+    ArrayList<Card> board_cards= new ArrayList<>();
+    ArrayList<Card> hand_cards= new ArrayList<>();
+    ArrayList<Card> taken_cards= new ArrayList<>();
     boolean isMyTurn;
     boolean isAbleToSeeHandCards=false;
 

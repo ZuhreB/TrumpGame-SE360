@@ -220,7 +220,7 @@ public class GamePageUI extends JFrame {
                         if(!myBoardCards.get(i-10).isTaken()){
                             bottomGrid.add(createCardPlaceholder(myBoardCards.get(i-10), false,false));
                         }else{
-                            topGrid.add(createCardPlaceholder(cardClosed, false,false));//bottom gridd add boş kart
+                            bottomGrid.add(createCardPlaceholder(cardClosed, false,false));//bottom gridd add boş kart
                         }
                     }
                 }

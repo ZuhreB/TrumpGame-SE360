@@ -131,6 +131,16 @@ public class GamePageLogic {
         }
     }
 
+    public Card findLocalCard(Card networkCard) {
+        if (GameState.getInstance().getOpponent() != null && GameState.getInstance().getOpponent().getBoard_cards() != null) {
+            for (Card c : GameState.getInstance().getOpponent().getBoard_cards()) {
+                if (c.getNumber().equals(networkCard.getNumber()) && c.getType().equals(networkCard.getType())) {
+                    return c; // Eşleşen yerel kartı döndür
+                }
+            }
+        }
+        return networkCard; // Bulunamazsa (hata durumu) gelen kartı geri döndür
+    }
     public Card getOpponentLastPlayedCard(){
         return (Card) GamePageUI.getInstace().getOpponentSelectedCardPanel().getClientProperty("card");
     }
