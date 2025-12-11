@@ -37,6 +37,7 @@ public class GamePageUI extends JFrame {
     JPanel bottomGrid;
     JPanel topGrid;
     JPanel westPanel;
+    JPanel eastPanel;
     private GamePageUI() {
         super("Trump Game - ");
         System.out.println("game page ui constructoru başlatıldı");
@@ -138,7 +139,7 @@ public class GamePageUI extends JFrame {
 
         add(centerPanel, BorderLayout.CENTER);
 
-        JPanel eastPanel = new JPanel(new GridLayout(6, 1, 0, 10));
+        eastPanel = new JPanel(new GridLayout(6, 1, 0, 10));
         eastPanel.setBackground(PANEL_COLOR);
         eastPanel.setPreferredSize(new Dimension(150, 0));
         eastPanel.setBorder(new EmptyBorder(3, 10, 3, 10));
@@ -290,6 +291,16 @@ public class GamePageUI extends JFrame {
         }
         westPanel.revalidate();
         westPanel.repaint();
+    }
+
+    public void refreshRight(){
+        eastPanel.removeAll();
+        for(Card card:GameState.getInstance().getMe().getHand_cards()){
+            card.setClose(false);
+            eastPanel.add(createCardPlaceholder(card,true,false));
+        }
+        eastPanel.revalidate();
+        eastPanel.repaint();
     }
 
     public void assignTrumpLabel(){

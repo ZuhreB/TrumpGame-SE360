@@ -1,5 +1,7 @@
 package src.Model;
 
+import src.GamePage.GamePageUI;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -75,5 +77,6 @@ public class User implements Serializable {
 
     public void setAbleToSeeHandCards(boolean ableToSeeHandCards) {
         isAbleToSeeHandCards = ableToSeeHandCards;
+        GamePageUI.getInstace().refreshRight();
     }
 }
