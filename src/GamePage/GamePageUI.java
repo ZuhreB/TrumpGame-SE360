@@ -27,7 +27,7 @@ public class GamePageUI extends JFrame {
 
 
 
-    Card card=new Card("src/cards/card_close.jpg","Lu",true,"");
+    Card cardClosed=new Card("src/cards/card_close.jpg","1",true,"");
 
 
     private static GamePageUI instace = new GamePageUI();
@@ -123,14 +123,14 @@ public class GamePageUI extends JFrame {
 
 
         for (int i = 0; i < 10; i++) {
-            topGrid.add(createCardPlaceholder(card,false,true));
+            topGrid.add(createCardPlaceholder(cardClosed,false,true));
         }
 
         bottomGrid = new JPanel(new GridLayout(2, 5, 10, 10));
         bottomGrid.setBackground(BG_COLOR);
 
         for (int i = 0; i < 10; i++) {
-            bottomGrid.add(createCardPlaceholder(card,false,false));
+            bottomGrid.add(createCardPlaceholder(cardClosed,false,false));
         }
 
         centerPanel.add(topGrid);
@@ -144,7 +144,7 @@ public class GamePageUI extends JFrame {
         eastPanel.setBorder(new EmptyBorder(3, 10, 3, 10));
 
         for (int i = 0; i < 6; i++) {
-            JPanel cards = createCardPlaceholder(card,true,false);
+            JPanel cards = createCardPlaceholder(cardClosed,true,false);
             cards.setBackground(new Color(100, 149, 237));
             eastPanel.add(cards);
         }
@@ -220,8 +220,7 @@ public class GamePageUI extends JFrame {
                         if(!myBoardCards.get(i-10).isTaken()){
                             bottomGrid.add(createCardPlaceholder(myBoardCards.get(i-10), false,false));
                         }else{
-                            Card c =new Card("src/cards/card_close.jpg","Lu",true,"");
-                            topGrid.add(createCardPlaceholder(c, false,false));//bottom gridd add boş kart
+                            topGrid.add(createCardPlaceholder(cardClosed, false,false));//bottom gridd add boş kart
                         }
                     }
                 }
@@ -232,8 +231,7 @@ public class GamePageUI extends JFrame {
                     }else if(!myBoardCards.get(i-10).isTaken()){
                             bottomGrid.add(createCardPlaceholder(myBoardCards.get(i-10), false,false));
                     }else{
-                        Card c =new Card("src/cards/card_close.jpg","Lu",true,"");
-                        topGrid.add(createCardPlaceholder(c, false,false));//bottom gridd add boş kart
+                       bottomGrid.add(createCardPlaceholder(cardClosed, false,false));//bottom gridd add boş kart
                     }
 
 
@@ -252,13 +250,12 @@ public class GamePageUI extends JFrame {
             if(myRole==Role.GUEST){
                 for (int i = 19; i > 9; i--) {
                     if(!myOpponentBoardCards.get(i).isTaken()){
-                        topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false,false));
+                        topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false,true));
                     }else{
                         if(!myOpponentBoardCards.get(i-10).isTaken()){
-                            topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i-10), false,false));
+                            topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i-10), false,true));
                         }else{
-                            Card c =new Card("src/cards/card_close.jpg","Lu",true,"");
-                            topGrid.add(createCardPlaceholder(c, false,false));//bottom gridd add boş kart
+                            topGrid.add(createCardPlaceholder(cardClosed, false,true));//bottom gridd add boş kart
                         }
                     }
                 }
@@ -271,11 +268,9 @@ public class GamePageUI extends JFrame {
                     }else if(!myOpponentBoardCards.get(i-10).isTaken()){
                         topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i-10), false,true));
                     }else{
-                        Card c =new Card("src/cards/card_close.jpg","Lu",true,"");
-                        topGrid.add(createCardPlaceholder(c, false,false));//bottom gridd add boş kart
+                        topGrid.add(createCardPlaceholder(cardClosed, false,true));//bottom gridd add boş kart
                         //bottom gridd add boş kart
                     }
-                    topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false,true));
                 }
             }
 
