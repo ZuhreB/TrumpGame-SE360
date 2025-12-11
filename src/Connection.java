@@ -160,10 +160,10 @@ public class Connection {
 
                String trump= (String)map.get(MessageType.TRUMP);
                 GameState.getInstance().setSecilen_trump(trump);
-                GameLogic.getInstance().showGameMessage("Koz belirlendi: " + trump);
                 GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
                 GameState.getInstance().makeAllCardsVisible();
                 GamePageUI.getInstace().refreshGrids();
+                GamePageUI.getInstace().assignTrumpLabel();
 
             }else if(map.containsKey(MessageType.PLAYED)){
                 GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY_BACK);

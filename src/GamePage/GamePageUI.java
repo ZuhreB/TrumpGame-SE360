@@ -14,6 +14,7 @@ public class GamePageUI extends JFrame {
     private JLabel myScoreLabel;
     private JLabel opponentScoreLabel;
     JLabel playFlowLabel= new JLabel();
+    JLabel trumpLabel= new JLabel();
 
     private final Color BG_COLOR = new Color(40, 44, 52);
     private final Color PANEL_COLOR = new Color(60, 63, 65);
@@ -88,6 +89,10 @@ public class GamePageUI extends JFrame {
         playFlowLabel.setForeground(TEXT_COLOR);
         playFlowLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        trumpLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        trumpLabel.setForeground(TEXT_COLOR);
+        trumpLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 
         westPanel.add(infoTitle);
         westPanel.add(Box.createRigidArea(new Dimension(0, 30)));
@@ -96,6 +101,8 @@ public class GamePageUI extends JFrame {
         westPanel.add(opponentScoreLabel);
         westPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         westPanel.add(playFlowLabel);
+        westPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        westPanel.add(trumpLabel);
         westPanel.add(Box.createVerticalGlue());
 
         add(westPanel, BorderLayout.WEST);
@@ -240,6 +247,13 @@ public class GamePageUI extends JFrame {
         }
         westPanel.revalidate();
         westPanel.repaint();
+    }
+    public void assignTrumpLabel(){
+        if(GameState.getInstance().getSecilen_trump()!=null){
+            trumpLabel.setText("Kozun: "+GameState.getInstance().getSecilen_trump());
+        }
+        trumpLabel.revalidate();
+        trumpLabel.repaint();
     }
 
     // Rakibin oynadığı kartı topGrid'de bulup etrafına ışık (çerçeve) ekler
