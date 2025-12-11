@@ -1,6 +1,7 @@
 package src;
 
 import src.GameLogic;
+import src.GamePage.GameManager;
 import src.GamePage.GamePageLogic;
 import src.GamePage.GamePageUI;
 import src.Model.*;
@@ -157,7 +158,6 @@ public class Connection {
             }
         }else if(obj instanceof HashMap<?,?> map){
             if(map.containsKey(MessageType.TRUMP)){
-
                String trump= (String)map.get(MessageType.TRUMP);
                 GameState.getInstance().setSecilen_trump(trump);
                 GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
@@ -175,7 +175,7 @@ public class Connection {
                 Card card= (Card)map.get(MessageType.PLAYED_BACK);
                 System.out.println(card.getNumber()+" "+card.getType());
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(card));
-
+                GameManager.getInstance().decideWhoTake(GamePageLogic.getInstance().getMyLastPlayedCard(),card);
             }
 
         }

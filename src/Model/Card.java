@@ -8,22 +8,25 @@ import java.util.List;
 
 public class Card implements Serializable {
 
-    Card(){
 
-    }
     String png_address;
     public static final String CLOSED_FACE_ADDRESS ="src/cards/card_close.jpg";
     String number;
+    int numberPower;
     String type;
     boolean isClose;
+    boolean isTaken=false;
     User owner;
     static ArrayList<Card> allCards = new ArrayList<>();
+
+
 
     public Card(String png_address, String number, boolean isClose, String type) {
         this.png_address = png_address;
         this.number = number;
         this.isClose = isClose;
         this.type = type;
+        assignPower();
     }
 
     public static void initAllCards(){
@@ -39,6 +42,20 @@ public class Card implements Serializable {
                 // All cards are initialized face-up (isClose = false).
                 allCards.add(new Card(imagePath, number, true, type));
             }
+        }
+    }
+
+    private void assignPower(){
+        if (number.equals("jack")) {
+            numberPower=11;
+        } else if (number.equals("queen")) {
+            numberPower=12;
+        } else if (number.equals("king")) {
+            numberPower=13;
+        }else if(number.equals("ace")){
+            numberPower=14;
+        } else{
+            numberPower=Integer.parseInt(number);
         }
     }
 
@@ -77,5 +94,21 @@ public class Card implements Serializable {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public int getNumberPower() {
+        return numberPower;
+    }
+
+    public void setNumberPower(int numberPower) {
+        this.numberPower = numberPower;
+    }
+
+    public boolean isTaken() {
+        return isTaken;
+    }
+
+    public void setTaken(boolean taken) {
+        isTaken = taken;
     }
 }

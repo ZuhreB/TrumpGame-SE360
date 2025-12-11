@@ -11,6 +11,7 @@ public class User implements Serializable {
     ArrayList<Card> hand_cards;
     ArrayList<Card> taken_cards;
     boolean isMyTurn;
+    boolean isAbleToSeeHandCards=false;
 
     public String getNickName() {
         return nickName;
@@ -66,5 +67,13 @@ public class User implements Serializable {
 
     public void setMyTurn(boolean myTurn) {
         isMyTurn = myTurn;
+    }
+
+    public boolean isAbleToSeeHandCards() {
+        return isAbleToSeeHandCards;
+    }
+
+    public void setAbleToSeeHandCards(boolean ableToSeeHandCards) {
+        isAbleToSeeHandCards = ableToSeeHandCards;
     }
 }

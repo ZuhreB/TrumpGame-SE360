@@ -127,7 +127,16 @@ public class GamePageLogic {
         }else if (GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY_BACK){
             Connection.getInstance().makeMapAndSend(MessageType.PLAYED_BACK,card);
             GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
+            GameManager.getInstance().decideWhoTake(card,getOpponentLastPlayedCard());
         }
+    }
+
+    public Card getOpponentLastPlayedCard(){
+        return (Card) GamePageUI.getInstace().getOpponentSelectedCardPanel().getClientProperty("card");
+    }
+
+    public Card getMyLastPlayedCard(){
+        return (Card) GamePageUI.getInstace().getSelectedCardPanel().getClientProperty("card");
     }
 
 }

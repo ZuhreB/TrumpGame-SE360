@@ -25,7 +25,11 @@ public class GamePageUI extends JFrame {
     private JPanel selectedCardPanel = null; // Hangi kartın seçili olduğunu tutar
     private JPanel opponentSelectedCardPanel = null; // Rakibin seçtiği kartı tutar
 
+
+
     Card card=new Card("src/cards/card_close.jpg","Lu",true,"");
+
+
     private static GamePageUI instace = new GamePageUI();
 
 
@@ -193,6 +197,14 @@ public class GamePageUI extends JFrame {
         return cardPanel;
     }
 
+    public JPanel getOpponentSelectedCardPanel() {
+        return opponentSelectedCardPanel;
+    }
+
+    public JPanel getSelectedCardPanel() {
+        return selectedCardPanel;
+    }
+
     public void refreshGrids() {
         bottomGrid.removeAll();
 
@@ -200,14 +212,31 @@ public class GamePageUI extends JFrame {
         ArrayList<Card> myBoardCards = GameState.getInstance().getMe().getBoard_cards();
 
         if (myBoardCards != null && myBoardCards.size() >= 20) {
-
             if (myRole == Role.GUEST) {
                 for (int i = 19; i >= 10; i--) {
-                    bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false,false));
+                    if(!myBoardCards.get(i).isTaken()){
+                        bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false,false));
+                    }else{
+                        if(!myBoardCards.get(i-10).isTaken()){
+                            bottomGrid.add(createCardPlaceholder(myBoardCards.get(i-10), false,false));
+                        }else{
+                            Card c =new Card("src/cards/card_close.jpg","Lu",true,"");
+                            topGrid.add(createCardPlaceholder(c, false,false));//bottom gridd add boş kart
+                        }
+                    }
                 }
             } else {
                 for (int i = 10; i < 20; i++) {
-                    bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false,false));
+                    if(!myBoardCards.get(i).isTaken()){
+                        bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false,false));
+                    }else if(!myBoardCards.get(i-10).isTaken()){
+                            bottomGrid.add(createCardPlaceholder(myBoardCards.get(i-10), false,false));
+                    }else{
+                        Card c =new Card("src/cards/card_close.jpg","Lu",true,"");
+                        topGrid.add(createCardPlaceholder(c, false,false));//bottom gridd add boş kart
+                    }
+
+
                 }
             }
         }
@@ -222,12 +251,30 @@ public class GamePageUI extends JFrame {
         if (myOpponentBoardCards != null && myOpponentBoardCards.size() >= 20) {
             if(myRole==Role.GUEST){
                 for (int i = 19; i > 9; i--) {
-                    topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false,true));
+                    if(!myOpponentBoardCards.get(i).isTaken()){
+                        topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false,false));
+                    }else{
+                        if(!myOpponentBoardCards.get(i-10).isTaken()){
+                            topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i-10), false,false));
+                        }else{
+                            Card c =new Card("src/cards/card_close.jpg","Lu",true,"");
+                            topGrid.add(createCardPlaceholder(c, false,false));//bottom gridd add boş kart
+                        }
+                    }
                 }
             }else{
                 // Rakip kartları her zaman düz (veya isteğe göre ters) basılabilir.
                 // Genelde rakip kartları standart (10-19) bırakılır.
                 for (int i = 10; i < 20; i++) {
+                    if(!myOpponentBoardCards.get(i).isTaken()){
+                        topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false,true));
+                    }else if(!myOpponentBoardCards.get(i-10).isTaken()){
+                        topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i-10), false,true));
+                    }else{
+                        Card c =new Card("src/cards/card_close.jpg","Lu",true,"");
+                        topGrid.add(createCardPlaceholder(c, false,false));//bottom gridd add boş kart
+                        //bottom gridd add boş kart
+                    }
                     topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false,true));
                 }
             }
@@ -237,6 +284,7 @@ public class GamePageUI extends JFrame {
         topGrid.revalidate();
         topGrid.repaint();
     }
+
     public void refreshWest(){
         if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY){
             playFlowLabel.setText("Oynama sırası sende");
@@ -248,6 +296,7 @@ public class GamePageUI extends JFrame {
         westPanel.revalidate();
         westPanel.repaint();
     }
+
     public void assignTrumpLabel(){
         if(GameState.getInstance().getSecilen_trump()!=null){
             trumpLabel.setText("Kozun: "+GameState.getInstance().getSecilen_trump());
@@ -278,6 +327,7 @@ public class GamePageUI extends JFrame {
     public static GamePageUI getInstace() {
         return instace;
     }
+
 
 
 }
