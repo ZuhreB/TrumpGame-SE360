@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GameManager {
     private static GameManager instance = new GameManager();
-
+    User winner;
     private GameManager() {
     }
 
@@ -20,31 +20,44 @@ public class GameManager {
         return instance;
     }
 
-    public void decideWhoTake(Card myCard, Card opponentCard) {
+    public void decideWhoTake(Card myCard, Card opponentCard,PLAY_FLOW myRole) {
+
         if (myCard.getType().equals(opponentCard.getType())) {
-            User winner = myCard.getNumberPower() > opponentCard.getNumberPower() ?
+            winner = myCard.getNumberPower() > opponentCard.getNumberPower() ?
                     GameState.getInstance().getMe() :
                     GameState.getInstance().getOpponent();
-
-            myCard.setOwner(winner);
-            opponentCard.setOwner(winner);
-            myCard.setTaken(true);
-            opponentCard.setTaken(true);
-
+        } else if(myCard.getType()==GameState.getInstance().getSecilen_trump() ||
+                opponentCard.getType()==GameState.getInstance().getSecilen_trump()){
+            winner=opponentCard.getType()==GameState.getInstance().getSecilen_trump()?
+                    GameState.getInstance().getOpponent():
+           GameState.getInstance().getMe();
             winner.getTaken_cards().addAll(List.of(myCard, opponentCard));
-
-            if(!winner.isAbleToSeeHandCards()) winner.setAbleToSeeHandCards(true);
-
-            if(GameState.getInstance().getMe().equals(winner)){
-                System.out.println("GAZANDIM");
-                GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY);
+        }else{
+            if(myRole==PLAY_FLOW.PLAY){
+                winner=GameState.getInstance().getMe();
             }
-
-        } else {
-
         }
+        afterDecideWhoTakeCard(myCard, opponentCard);
+
+
         GamePageUI.getInstace().refreshGrids();
         GamePageUI.getInstace().refreshWest();
+    }
+
+    void afterDecideWhoTakeCard(Card myCard,Card opponentCard){
+        myCard.setOwner(winner);
+        opponentCard.setOwner(winner);
+        myCard.setTaken(true);
+        opponentCard.setTaken(true);
+
+        winner.getTaken_cards().addAll(List.of(myCard, opponentCard));
+
+        if(!winner.isAbleToSeeHandCards()) winner.setAbleToSeeHandCards(true);
+
+        if(GameState.getInstance().getMe().equals(winner)){
+            System.out.println("GAZANDIM");
+            GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY);
+        }
     }
 
 }

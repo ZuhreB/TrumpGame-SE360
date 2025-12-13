@@ -171,13 +171,14 @@ public class Connection {
                 Card localCard =GamePageLogic.getInstance().findLocalCard(card);
                 System.out.println(card.getNumber()+" "+card.getType());
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(localCard));
+
             }else if(map.containsKey(MessageType.PLAYED_BACK)){
                 GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
                 Card card= (Card)map.get(MessageType.PLAYED_BACK);
                 Card localCard =GamePageLogic.getInstance().findLocalCard(card);
                 System.out.println(card.getNumber()+" "+card.getType());
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(localCard));
-                GameManager.getInstance().decideWhoTake(GamePageLogic.getInstance().getMyLastPlayedCard(),localCard);
+                GameManager.getInstance().decideWhoTake(GamePageLogic.getInstance().getMyLastPlayedCard(),localCard,PLAY_FLOW.PLAY);
             }
 
         }
