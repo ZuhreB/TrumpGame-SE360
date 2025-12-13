@@ -141,6 +141,7 @@ public class GamePageLogic {
         }
         return networkCard; // Bulunamazsa (hata durumu) gelen kartı geri döndür
     }
+
     public Card getOpponentLastPlayedCard(){
         return (Card) GamePageUI.getInstace().getOpponentSelectedCardPanel().getClientProperty("card");
     }

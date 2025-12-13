@@ -187,9 +187,17 @@ public class GamePageUI extends JFrame {
                         selectedCardPanel.setBorder(null);
                     }
                     selectedCardPanel = cardPanel;
-                    cardPanel.setBorder(BorderFactory.createLineBorder(HIGHLIGHT_COLOR, 4));
+                    if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY ||
+                            GameManager.getInstance().controlIfClickable(
+                                    (Card) selectedCardPanel.getClientProperty("card"),
+                                    (Card) opponentSelectedCardPanel.getClientProperty("card")
+                            )
+                    )
+                    {
+                        cardPanel.setBorder(BorderFactory.createLineBorder(HIGHLIGHT_COLOR, 4));
+                        GamePageLogic.getInstance().controlSendingCard(card);
+                    }
 
-                    GamePageLogic.getInstance().controlSendingCard(card);
                 }
             });
         }
