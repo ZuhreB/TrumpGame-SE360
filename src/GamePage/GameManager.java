@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GameManager {
     private static GameManager instance = new GameManager();
-    User winner;
+    User winner=new User();
     private GameManager() {
     }
 
@@ -31,10 +31,11 @@ public class GameManager {
             winner=opponentCard.getType()==GameState.getInstance().getSecilen_trump()?
                     GameState.getInstance().getOpponent():
            GameState.getInstance().getMe();
-            winner.getTaken_cards().addAll(List.of(myCard, opponentCard));
         }else{
             if(myRole==PLAY_FLOW.PLAY){
                 winner=GameState.getInstance().getMe();
+            }else{
+                winner=GameState.getInstance().getOpponent();
             }
         }
         afterDecideWhoTakeCard(myCard, opponentCard);
