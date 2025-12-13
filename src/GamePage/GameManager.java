@@ -21,7 +21,6 @@ public class GameManager {
     }
 
     public void decideWhoTake(Card myCard, Card opponentCard,PLAY_FLOW myRole) {
-
         if (myCard.getType().equals(opponentCard.getType())) {
             winner = myCard.getNumberPower() > opponentCard.getNumberPower() ?
                     GameState.getInstance().getMe() :
@@ -52,8 +51,7 @@ public class GameManager {
         opponentCard.setTaken(true);
 
         winner.getTaken_cards().addAll(List.of(myCard, opponentCard));
-
-        if(!winner.isAbleToSeeHandCards()) winner.setAbleToSeeHandCards(true);
+        if(!winner.isAbleToSeeHandCards()&&winner==GameState.getInstance().getMe()) winner.setAbleToSeeHandCards(true);
 
         if(GameState.getInstance().getMe().equals(winner)){
             System.out.println("GAZANDIM");
