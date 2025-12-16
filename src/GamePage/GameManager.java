@@ -26,9 +26,9 @@ public class GameManager {
             winner = myCard.getNumberPower() > opponentCard.getNumberPower() ?
                     GameState.getInstance().getMe() :
                     GameState.getInstance().getOpponent();
-        } else if(myCard.getType()==GameState.getInstance().getSecilen_trump() ||
-                opponentCard.getType()==GameState.getInstance().getSecilen_trump()){
-            winner=opponentCard.getType()==GameState.getInstance().getSecilen_trump()?
+        } else if(myCard.getType().equals(GameState.getInstance().getSecilen_trump()) ||
+                opponentCard.getType().equals(GameState.getInstance().getSecilen_trump())){
+            winner=opponentCard.getType().equals(GameState.getInstance().getSecilen_trump())?
                     GameState.getInstance().getOpponent():
            GameState.getInstance().getMe();
         }else{
@@ -39,10 +39,9 @@ public class GameManager {
             }
         }
         afterDecideWhoTakeCard(myCard, opponentCard);
-
-
         GamePageUI.getInstace().refreshGrids();
         GamePageUI.getInstace().refreshWest();
+
     }
 
     void afterDecideWhoTakeCard(Card myCard,Card opponentCard){
@@ -58,6 +57,8 @@ public class GameManager {
             System.out.println("GAZANDIM");
             GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY);
         }
+        GamePageUI.getInstace().setOpponnentPlayedHandCardPanel(null);
+        GamePageUI.getInstace().setOpponentSelectedCardPanel(null);
     }
 
     public boolean controlIfClickable(Card intedtedCard, Card opponentCard) {
@@ -71,7 +72,7 @@ public class GameManager {
             System.out.println("[DEBUG] Akış PLAY_BACK modunda. Kurallar kontrol ediliyor...");
 
             // 2. Renk Eşleşmesi Kontrolü
-            if (intedtedCard.getType() == opponentCard.getType()) {
+            if (intedtedCard.getType().equals(opponentCard.getType())) {
                 System.out.println("[DEBUG] Kart tipleri EŞLEŞİYOR. Hamle geçerli.");
                 System.out.println("--- DEBUG: controlIfClickable BİTTİ (TRUE) ---");
                 return true;
@@ -84,7 +85,7 @@ public class GameManager {
             for (Card card : getPlayableCards()) {
                 // Döngü çok şişmesin diye sadece eşleşme bulunursa detay yazdırıyoruz,
                 // ama her kartı görmek istersen buraya da print atabilirsin.
-                if (card.getType() == opponentCard.getType()) {
+                if (card.getType().equals( opponentCard.getType())) {
                     System.out.println("a"); // Senin orijinal logun
                     System.out.println("[DEBUG] KURAL İHLALİ: Elde rakibin renginden (" + opponentCard.getType() + ") kart bulundu: " + card);
 
@@ -97,15 +98,17 @@ public class GameManager {
             System.out.println("[DEBUG] Elde rakibin renginden KART YOK. Koz kontrolüne geçiliyor.");
 
             // 4. Koz Kontrolü (Renk yoksa koz atma zorunluluğu)
-            Object currentTrump = GameState.getInstance().getSecilen_trump();
+            String currentTrump = GameState.getInstance().getSecilen_trump();
             System.out.println("[DEBUG] Geçerli Koz (Trump): " + currentTrump);
 
             // Eğer oynamak istediğimiz kart koz değilse, elimizde koz var mı diye bakıyoruz
-            if (intedtedCard.getType() != currentTrump) {
+            if (!intedtedCard.getType().equals(currentTrump)) {
+                System.out.println("benim tip "+intedtedCard.getType()+" koz da "+currentTrump);
                 System.out.println("[DEBUG] Seçilen kart KOZ DEĞİL. Elde koz var mı diye bakılıyor...");
 
                 for (Card card : getPlayableCards()) {
-                    if (card.getType() == currentTrump) {
+                    System.out.println(card.getNumber()+" "+card.getType());
+                    if (card.getType().equals(currentTrump)) {
                         System.out.println("b"); // Senin orijinal logun
                         System.out.println("[DEBUG] KURAL İHLALİ: Elde KOZ bulundu: " + card + ". Renk yoksa koz oynanmalı.");
 

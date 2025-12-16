@@ -135,7 +135,13 @@ public class GamePageLogic {
         if (GameState.getInstance().getOpponent() != null && GameState.getInstance().getOpponent().getBoard_cards() != null) {
             for (Card c : GameState.getInstance().getOpponent().getBoard_cards()) {
                 if (c.getNumber().equals(networkCard.getNumber()) && c.getType().equals(networkCard.getType())) {
-                    return c; // Eşleşen yerel kartı döndür
+                    return c; // Eşleşen yerel kartı döndür ama board carddan
+                }
+            }
+
+            for(Card c : GameState.getInstance().getOpponent().getHand_cards()){
+                if (c.getNumber().equals(networkCard.getNumber()) && c.getType().equals(networkCard.getType())) {
+                    return c; // Eşleşen yerel kartı döndür ama hand carddan
                 }
             }
         }
@@ -143,7 +149,12 @@ public class GamePageLogic {
     }
 
     public Card getOpponentLastPlayedCard(){
-        return (Card) GamePageUI.getInstace().getOpponentSelectedCardPanel().getClientProperty("card");
+        Card card= (Card) GamePageUI.getInstace().getOpponentSelectedCardPanel().getClientProperty("card");
+        if(card==null){
+            //Bu noktada ben play back modundayım, ve rakibimin son oynadığı kart board cardstan değil handden
+            card = (Card) GamePageUI.getInstace().getOpponentLastPlayedHandCards().getClientProperty("card");
+        }
+        return card;
     }
 
     public Card getMyLastPlayedCard(){

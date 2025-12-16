@@ -15,7 +15,6 @@ public class GamePageUI extends JFrame {
     private JLabel opponentScoreLabel;
     JLabel playFlowLabel= new JLabel();
     JLabel trumpLabel= new JLabel();
-
     private final Color BG_COLOR = new Color(40, 44, 52);
     private final Color PANEL_COLOR = new Color(60, 63, 65);
     private final Color TEXT_COLOR = new Color(230, 230, 230);
@@ -24,6 +23,7 @@ public class GamePageUI extends JFrame {
     private final Color HIGHLIGHT_COLOR = new Color(255, 215, 0);
     private JPanel selectedCardPanel = null; // Hangi kartın seçili olduğunu tutar
     private JPanel opponentSelectedCardPanel = null; // Rakibin seçtiği kartı tutar
+    private JPanel opponnentPlayedHandCardPanel = new JPanel();
 
 
 
@@ -99,6 +99,7 @@ public class GamePageUI extends JFrame {
         trumpLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
+
         westPanel.add(infoTitle);
         westPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         westPanel.add(myScoreLabel);
@@ -108,6 +109,8 @@ public class GamePageUI extends JFrame {
         westPanel.add(playFlowLabel);
         westPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         westPanel.add(trumpLabel);
+        westPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        westPanel.add(opponnentPlayedHandCardPanel);
         westPanel.add(Box.createVerticalGlue());
 
         add(westPanel, BorderLayout.WEST);
@@ -212,6 +215,10 @@ public class GamePageUI extends JFrame {
 
     public JPanel getSelectedCardPanel() {
         return selectedCardPanel;
+    }
+
+    public JPanel getOpponentLastPlayedHandCards(){
+        return opponnentPlayedHandCardPanel;
     }
 
     public void refreshGrids() {
@@ -336,6 +343,10 @@ public class GamePageUI extends JFrame {
                 }
             }
         }
+
+        //TopGridde bulamazsa sol panelde göster
+        opponnentPlayedHandCardPanel=createCardPlaceholder(card,false,false);
+        refreshWest();
     }
 
     public static GamePageUI getInstace() {
@@ -343,5 +354,11 @@ public class GamePageUI extends JFrame {
     }
 
 
+    public void setOpponentSelectedCardPanel(JPanel opponentSelectedCardPanel) {
+        this.opponentSelectedCardPanel = opponentSelectedCardPanel;
+    }
 
+    public void setOpponnentPlayedHandCardPanel(JPanel opponnentPlayedHandCardPanel) {
+        this.opponnentPlayedHandCardPanel = opponnentPlayedHandCardPanel;
+    }
 }
