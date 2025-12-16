@@ -90,7 +90,7 @@ public class GamePageLogic {
     }
 
     private void askForTrump(){
-        String [] options ={"Maça","Kupa","Sinek","Karo"};
+        String [] options ={"spades","hearts","clubs","diamonds"};
         int choice = JOptionPane.showOptionDialog(
                 null,
                 "Kozu seçiniz",
@@ -103,11 +103,11 @@ public class GamePageLogic {
         );
         String selectedTrump = "";
         switch (choice) {
-            case 0: selectedTrump = "Maça"; break;
-            case 1: selectedTrump = "Kupa"; break;
-            case 2: selectedTrump = "Sinek"; break;
-            case 3: selectedTrump = "Karo"; break;
-            default: selectedTrump = "Maça"; // bu varsayılan olcak hiç bişi seçmeden kapatırsa diye
+            case 0: selectedTrump = "spades"; break;
+            case 1: selectedTrump = "hearts"; break;
+            case 2: selectedTrump = "clubs"; break;
+            case 3: selectedTrump = "diamonds"; break;
+            default: selectedTrump = "spades"; // bu varsayılan olcak hiç bişi seçmeden kapatırsa diye
         }
         System.out.println("Koz:"+selectedTrump);
         GameState.getInstance().setSecilen_trump(selectedTrump);

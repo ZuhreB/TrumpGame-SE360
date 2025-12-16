@@ -16,7 +16,6 @@ public class GameManager {
     private GameManager() {
     }
 
-    ;
 
     public static GameManager getInstance() {
         return instance;
