@@ -147,7 +147,9 @@ public class GameManager {
         }
         if(GameState.getInstance().getMe().isAbleToSeeHandCards()){
             for(Card card:GameState.getInstance().getMe().getHand_cards()){
-                playableCards.add(card);
+                if(!card.isTaken()){
+                    playableCards.add(card);
+                }
             }
         }
         return playableCards;

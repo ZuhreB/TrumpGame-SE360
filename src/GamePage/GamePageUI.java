@@ -223,6 +223,9 @@ public class GamePageUI extends JFrame {
 
     public void refreshGrids() {
         bottomGrid.removeAll();
+        JPanel emptyPanel=new JPanel();
+        emptyPanel.setBackground(BG_COLOR);
+
 
         Role myRole = GameState.getInstance().getMe().getRole();
         ArrayList<Card> myBoardCards = GameState.getInstance().getMe().getBoard_cards();
@@ -236,7 +239,7 @@ public class GamePageUI extends JFrame {
                         if(!myBoardCards.get(i-10).isTaken()){
                             bottomGrid.add(createCardPlaceholder(myBoardCards.get(i-10), false,false));
                         }else{
-                            bottomGrid.add(createCardPlaceholder(cardClosed, false,false));//bottom gridd add boş kart
+                            bottomGrid.add(emptyPanel);//bottom gridd add boş kart
                         }
                     }
                 }
@@ -247,7 +250,7 @@ public class GamePageUI extends JFrame {
                     }else if(!myBoardCards.get(i-10).isTaken()){
                             bottomGrid.add(createCardPlaceholder(myBoardCards.get(i-10), false,false));
                     }else{
-                       bottomGrid.add(createCardPlaceholder(cardClosed, false,false));//bottom gridd add boş kart
+                       bottomGrid.add(emptyPanel);//bottom gridd add boş kart
                     }
 
 
@@ -271,7 +274,7 @@ public class GamePageUI extends JFrame {
                         if(!myOpponentBoardCards.get(i-10).isTaken()){
                             topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i-10), false,true));
                         }else{
-                            topGrid.add(createCardPlaceholder(cardClosed, false,true));//bottom gridd add boş kart
+                            topGrid.add(emptyPanel);//bottom gridd add boş kart
                         }
                     }
                 }
@@ -284,7 +287,7 @@ public class GamePageUI extends JFrame {
                     }else if(!myOpponentBoardCards.get(i-10).isTaken()){
                         topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i-10), false,true));
                     }else{
-                        topGrid.add(createCardPlaceholder(cardClosed, false,true));//bottom gridd add boş kart
+                        topGrid.add(emptyPanel);//bottom gridd add boş kart
                         //bottom gridd add boş kart
                     }
                 }
@@ -311,6 +314,7 @@ public class GamePageUI extends JFrame {
     }
 
     public void refreshRight(){
+        if(!GameState.getInstance().getMe().isAbleToSeeHandCards()) return;
         eastPanel.removeAll();
         for(Card card:GameState.getInstance().getMe().getHand_cards()){
             card.setClose(false);
