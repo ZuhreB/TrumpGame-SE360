@@ -4,7 +4,7 @@ import src.GamePage.GamePageUI;
 import src.Model.GameState;
 import src.Model.Role;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 public class GameLogic {
 
@@ -72,6 +72,7 @@ public class GameLogic {
 
     public void showGameMessage(String message) {
         if (gameGui != null) {
+            JOptionPane.showMessageDialog(gameGui,message);
         } else {
             MainPageUI.getInstance().showGuiMessage(message);
         }
