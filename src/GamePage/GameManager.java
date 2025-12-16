@@ -41,7 +41,7 @@ public class GameManager {
         afterDecideWhoTakeCard(myCard, opponentCard);
         GamePageUI.getInstace().refreshGrids();
         GamePageUI.getInstace().refreshWest();
-
+        GamePageUI.getInstace().refreshRight();
     }
 
     void afterDecideWhoTakeCard(Card myCard,Card opponentCard){
@@ -57,8 +57,8 @@ public class GameManager {
             System.out.println("GAZANDIM");
             GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY);
         }
-        GamePageUI.getInstace().setOpponnentPlayedHandCardPanel(null);
-        GamePageUI.getInstace().setOpponentSelectedCardPanel(null);
+        //GamePageUI.getInstace().setOpponnentPlayedHandCardPanel(null);
+        //GamePageUI.getInstace().setOpponentSelectedCardPanel(null);
     }
 
     public boolean controlIfClickable(Card intedtedCard, Card opponentCard) {

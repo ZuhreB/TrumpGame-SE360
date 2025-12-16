@@ -97,7 +97,7 @@ public class GamePageUI extends JFrame {
         trumpLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         trumpLabel.setForeground(TEXT_COLOR);
         trumpLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        opponnentPlayedHandCardPanel.setBackground(BG_COLOR);
+        opponnentPlayedHandCardPanel.setBackground(PANEL_COLOR);
 
 
         westPanel.add(infoTitle);
@@ -304,6 +304,8 @@ public class GamePageUI extends JFrame {
         }else if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.WAIT){
             playFlowLabel.setText("Bekleniyor...");
         }
+        opponnentPlayedHandCardPanel.removeAll();
+
         westPanel.revalidate();
         westPanel.repaint();
     }
@@ -312,7 +314,9 @@ public class GamePageUI extends JFrame {
         eastPanel.removeAll();
         for(Card card:GameState.getInstance().getMe().getHand_cards()){
             card.setClose(false);
-            eastPanel.add(createCardPlaceholder(card,true,false));
+            if(!card.isTaken()){
+                eastPanel.add(createCardPlaceholder(card,true,false));
+            }
         }
         eastPanel.revalidate();
         eastPanel.repaint();
@@ -339,22 +343,21 @@ public class GamePageUI extends JFrame {
                 if (c != null && c.getNumber().equals(card.getNumber()) && c.getType().equals(card.getType())) {
                     opponentSelectedCardPanel = panel;
                     panel.setBorder(BorderFactory.createLineBorder(HIGHLIGHT_COLOR, 4));
-                    break;
+                    return;
                 }
             }
         }
-
         //TopGridde bulamazsa sol panelde göster
-        System.out.println("rakip handen attı abi ne bok yiyecez inan bilmiyorum");
         opponnentPlayedHandCardPanel.removeAll();
-        opponnentPlayedHandCardPanel.setBackground(BG_COLOR);
-
+        opponnentPlayedHandCardPanel.setBackground(PANEL_COLOR);
+        card.setClose(false);
         // 2. Yeni kart panelini oluştur
         JPanel newCardPanel = createCardPlaceholder(card, false, false);
 
         // 3. Mevcut panelin İÇİNE ekle (Değişkeni değiştirmek yerine add yapıyoruz)
         opponnentPlayedHandCardPanel.add(newCardPanel);
-
+        opponnentPlayedHandCardPanel=newCardPanel;
+        opponentSelectedCardPanel.putClientProperty("card",card);
         // 4. Paneli yenile ki görünsün
         opponnentPlayedHandCardPanel.revalidate();
         opponnentPlayedHandCardPanel.repaint();
