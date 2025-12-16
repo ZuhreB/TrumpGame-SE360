@@ -97,7 +97,7 @@ public class GamePageUI extends JFrame {
         trumpLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         trumpLabel.setForeground(TEXT_COLOR);
         trumpLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
+        opponnentPlayedHandCardPanel.setBackground(BG_COLOR);
 
 
         westPanel.add(infoTitle);
@@ -345,8 +345,21 @@ public class GamePageUI extends JFrame {
         }
 
         //TopGridde bulamazsa sol panelde göster
-        opponnentPlayedHandCardPanel=createCardPlaceholder(card,false,false);
-        refreshWest();
+        System.out.println("rakip handen attı abi ne bok yiyecez inan bilmiyorum");
+        opponnentPlayedHandCardPanel.removeAll();
+        opponnentPlayedHandCardPanel.setBackground(BG_COLOR);
+
+        // 2. Yeni kart panelini oluştur
+        JPanel newCardPanel = createCardPlaceholder(card, false, false);
+
+        // 3. Mevcut panelin İÇİNE ekle (Değişkeni değiştirmek yerine add yapıyoruz)
+        opponnentPlayedHandCardPanel.add(newCardPanel);
+
+        // 4. Paneli yenile ki görünsün
+        opponnentPlayedHandCardPanel.revalidate();
+        opponnentPlayedHandCardPanel.repaint();
+
+        //refreshWest();
     }
 
     public static GamePageUI getInstace() {
