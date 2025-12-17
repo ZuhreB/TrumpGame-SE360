@@ -7,6 +7,7 @@ public class GameState {
      User opponent = new User();
      private String secilen_trump;
      private PLAY_FLOW playFlow;
+     private int gameId= -1;// database de game_id nin tuttuğu değer her hamlede bu id ye göre eklencek
      private static GameState instance= new GameState();
 
      private GameState(){}
@@ -31,6 +32,13 @@ public class GameState {
         return instance;
     }
 
+    public int getDbGameId() {
+        return gameId;
+    }
+
+    public void setDbGameId(int dbGameId) {
+        this.gameId = dbGameId;
+    }
     public String getSecilen_trump() {
         return secilen_trump;
     }

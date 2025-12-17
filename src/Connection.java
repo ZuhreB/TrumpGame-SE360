@@ -1,5 +1,6 @@
 package src;
 
+import src.Database.DatabaseManager;
 import src.GameLogic;
 import src.GamePage.GameManager;
 import src.GamePage.GamePageLogic;
@@ -160,6 +161,11 @@ public class Connection {
             if(map.containsKey(MessageType.TRUMP)){
                String trump= (String)map.get(MessageType.TRUMP);
                 GameState.getInstance().setSecilen_trump(trump);
+                // bu kısımda tump mesajını guest hosta attığı için bu aşamada host= me ve oyunu bu aşamada host için başlatabilirim
+                int hostId= DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getMe().getNickName());
+                int guestId = DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getOpponent().getNickName());
+                int gameId=DatabaseManager.getInstance().createGame(hostId,guestId,trump);
+                GameState.getInstance().setDbGameId(gameId);
                 GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
                 GameState.getInstance().makeAllCardsVisible();
                 GamePageUI.getInstace().refreshGrids();
@@ -170,6 +176,10 @@ public class Connection {
                 Card card= (Card)map.get(MessageType.PLAYED);
                 Card localCard =GamePageLogic.getInstance().findLocalCard(card);
                 System.out.println(card.getNumber()+" "+card.getType());
+                // rakibimin hamlesiini tam burada kaydedebilirim
+                int gameId = GameState.getInstance().getDbGameId();
+                int opponentUserId = DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getOpponent().getNickName());
+                if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, opponentUserId, card, 1, PLAY_FLOW.PLAY);
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(localCard));
 
             }else if(map.containsKey(MessageType.PLAYED_BACK)){
@@ -177,6 +187,11 @@ public class Connection {
                 Card card= (Card)map.get(MessageType.PLAYED_BACK);
                 Card localCard =GamePageLogic.getInstance().findLocalCard(card);
                 System.out.println(card.getNumber()+" "+card.getType());
+                // bir de bu kısımda rakibin oynadığı kart kaydedilir
+                int gameId = GameState.getInstance().getDbGameId();
+                int opponentUserId = DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getOpponent().getNickName());
+                if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, opponentUserId, card, 1, PLAY_FLOW.PLAY_BACK);
+
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(localCard));
                 GameManager.getInstance().decideWhoTake(GamePageLogic.getInstance().getMyLastPlayedCard(),localCard,PLAY_FLOW.PLAY);
             }

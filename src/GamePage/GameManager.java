@@ -1,6 +1,7 @@
 package src.GamePage;
 
 import src.Connection;
+import src.Database.DatabaseManager;
 import src.GameLogic;
 import src.Model.Card;
 import src.Model.GameState;
@@ -53,6 +54,15 @@ public class GameManager {
         winner.getTaken_cards().addAll(List.of(myCard, opponentCard));
         if(!winner.isAbleToSeeHandCards()&&winner==GameState.getInstance().getMe()) winner.setAbleToSeeHandCards(true);
 
+        // bu aşamada kazanan belli olduğu için score u güncelliycem
+        // kimin elinde ne kadar kart çok kart varsa o kazanacağı için her kart bir puan gibi düşünüp size'ları vericem
+        int gameId = GameState.getInstance().getDbGameId();
+
+        if(gameId != -1){
+            int myScore = GameState.getInstance().getMe().getTaken_cards().size();
+            int opponentScore = GameState.getInstance().getOpponent().getTaken_cards().size();
+            DatabaseManager.getInstance().updateGameScore(gameId, myScore, opponentScore);
+        }
         if(GameState.getInstance().getMe().equals(winner)){
             System.out.println("GAZANDIM");
             GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY);
@@ -133,7 +143,6 @@ public class GameManager {
         return true;
     }
 
-    
     public List<Card> getPlayableCards(){
         List<Card> playableCards = new ArrayList<>();
         List<Card> myBoardCards =GameState.getInstance().getMe().getBoard_cards();

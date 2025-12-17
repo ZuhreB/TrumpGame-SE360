@@ -1,6 +1,7 @@
 package src.GamePage;
 
 import src.Connection;
+import src.Database.DatabaseManager;
 import src.GameLogic;
 import src.Model.*;
 
@@ -122,9 +123,19 @@ public class GamePageLogic {
         if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.WAIT){
             GameLogic.getInstance().showGameMessage("YOU CAN NOT PLAY NOW WAIT");
         }else if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY){
+            // oynadığım hamleyi kaydediyorum
+            int gameId = GameState.getInstance().getDbGameId();
+            int myId = DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getMe().getNickName());
+            if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, myId, card, 1, PLAY_FLOW.PLAY);
+
             Connection.getInstance().makeMapAndSend(MessageType.PLAYED,card);
             GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
         }else if (GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY_BACK){
+            // oynadığım hamleyi kaydediyorum
+            int gameId = GameState.getInstance().getDbGameId();
+            int myId = DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getMe().getNickName());
+            if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, myId, card, 1, PLAY_FLOW.PLAY_BACK);
+
             Connection.getInstance().makeMapAndSend(MessageType.PLAYED_BACK,card);
             GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
             GameManager.getInstance().decideWhoTake(card,getOpponentLastPlayedCard(),PLAY_FLOW.PLAY_BACK);
