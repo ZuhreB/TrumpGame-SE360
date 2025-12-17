@@ -76,6 +76,9 @@ public class DatabaseManager {
     // Kullanıcıyı bulur veya yoksa oluşturur id döner eğer yoksa da -1 dönücek
     public int getOrCreateUser(String nickname) {
         try {
+            if(nickname==null){
+                nickname="Player"+ System.currentTimeMillis();
+            }
             PreparedStatement ps = connection.prepareStatement("SELECT user_id FROM Users WHERE nickname = ?");
             ps.setString(1, nickname);
             ResultSet rs = ps.executeQuery();

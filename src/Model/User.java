@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class User implements Serializable {
-    String nickName;
+    String nickName ="Player";
     int score;
     Role role;
     ArrayList<Card> board_cards= new ArrayList<>();
