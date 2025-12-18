@@ -43,6 +43,7 @@ public class GameManager {
         GamePageUI.getInstace().refreshGrids();
         GamePageUI.getInstace().refreshWest();
         GamePageUI.getInstace().refreshRight();
+        GamePageUI.getInstace().refreshScores();
     }
 
     void afterDecideWhoTakeCard(Card myCard,Card opponentCard){

@@ -326,6 +326,17 @@ public class GamePageUI extends JFrame {
         eastPanel.repaint();
     }
 
+    public void refreshScores() {
+        int myScore = GameState.getInstance().getMe().getTaken_cards().size();
+        int opponentScore = GameState.getInstance().getOpponent().getTaken_cards().size();
+
+        myScoreLabel.setText("Sen: " + myScore);
+        opponentScoreLabel.setText("Rakip: " + opponentScore);
+
+        westPanel.revalidate();
+        westPanel.repaint();
+    }
+
     public void assignTrumpLabel(){
         if(GameState.getInstance().getSecilen_trump()!=null){
             trumpLabel.setText("Kozun: "+GameState.getInstance().getSecilen_trump());
