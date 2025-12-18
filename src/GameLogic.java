@@ -28,7 +28,18 @@ public class GameLogic {
             //lobbyGui = null;
         }
 
-        this.gameGui = GamePageUI.getInstace();
+    }
+
+    public void returnToMainPage(){
+        GamePageUI.getInstace().dispose();
+        new Thread(() -> {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            SwingUtilities.invokeLater(() -> MainPageUI.getInstance().setVisible(true));
+        }).start();
     }
 
     public void joinGameAsHost(String nickname) {

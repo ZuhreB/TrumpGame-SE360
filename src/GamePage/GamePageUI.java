@@ -329,12 +329,20 @@ public class GamePageUI extends JFrame {
     public void refreshScores() {
         int myScore = GameState.getInstance().getMe().getTaken_cards().size();
         int opponentScore = GameState.getInstance().getOpponent().getTaken_cards().size();
+        if(myScore+opponentScore==52){
+            String result = myScore > opponentScore ? "Sen Kazandın!" :
+                    (opponentScore > myScore ? "Rakip Kazandı!" : "Berabere!");
 
-        myScoreLabel.setText("Sen: " + myScore);
-        opponentScoreLabel.setText("Rakip: " + opponentScore);
+            String message = result + "\nSkor: " + myScore + " - " + opponentScore;
+            GameLogic.getInstance().showGameMessage(message);
+            GameLogic.getInstance().returnToMainPage();
+        }else{
+            myScoreLabel.setText("Sen: " + myScore);
+            opponentScoreLabel.setText("Rakip: " + opponentScore);
 
-        westPanel.revalidate();
-        westPanel.repaint();
+            westPanel.revalidate();
+            westPanel.repaint();
+        }
     }
 
     public void assignTrumpLabel(){
