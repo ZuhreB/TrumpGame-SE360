@@ -151,7 +151,13 @@ public class Connection {
                 }
                 System.out.println();
             }else if(user.getRole()==Role.GUEST){
+                // Host'tan gelen obje yerel nickname'i ezmesin diye koruyoruz
+                String currentNick = GameState.getInstance().getMe().getNickName();
                 GameState.getInstance().setMe(user);
+                if (currentNick != null && !currentNick.isEmpty() && !currentNick.equals("Player")) {
+                    GameState.getInstance().getMe().setNickName(currentNick);
+                }
+
                 for(Card card:GameState.getInstance().getMe().getBoard_cards()){
                     System.out.print(card.getNumber()+" "+card.getType()+" ");
                 }
@@ -161,11 +167,12 @@ public class Connection {
             if(map.containsKey(MessageType.TRUMP)){
                String trump= (String)map.get(MessageType.TRUMP);
                 GameState.getInstance().setSecilen_trump(trump);
+
                 // bu kısımda tump mesajını guest hosta attığı için bu aşamada host= me ve oyunu bu aşamada host için başlatabilirim
-                int hostId= DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getMe().getNickName());
-                int guestId = DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getOpponent().getNickName());
-                int gameId=DatabaseManager.getInstance().createGame(hostId,guestId,trump);
-                GameState.getInstance().setDbGameId(gameId);
+                GameState.getInstance().setHostId(DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getMe().getNickName()+"host"));
+                GameState.getInstance().setGuestId(DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getOpponent().getNickName()+"guest"));
+                GameState.getInstance().setDbGameId(DatabaseManager.getInstance().createGame(GameState.getInstance().getHostId(),GameState.getInstance().getGuestId(),trump));
+
                 GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
                 GameState.getInstance().makeAllCardsVisible();
                 GamePageUI.getInstace().refreshGrids();
@@ -179,7 +186,7 @@ public class Connection {
                 // rakibimin hamlesiini tam burada kaydedebilirim
                 int gameId = GameState.getInstance().getDbGameId();
                 int opponentUserId = DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getOpponent().getNickName());
-                if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, opponentUserId, card, 1, PLAY_FLOW.PLAY);
+                if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, opponentUserId, card, GameState.getInstance().getTurnStep(), PLAY_FLOW.PLAY);
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(localCard));
 
             }else if(map.containsKey(MessageType.PLAYED_BACK)){
@@ -190,7 +197,7 @@ public class Connection {
                 // bir de bu kısımda rakibin oynadığı kart kaydedilir
                 int gameId = GameState.getInstance().getDbGameId();
                 int opponentUserId = DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getOpponent().getNickName());
-                if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, opponentUserId, card, 1, PLAY_FLOW.PLAY_BACK);
+                if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, opponentUserId, card, GameState.getInstance().getTurnStep(), PLAY_FLOW.PLAY_BACK);
 
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(localCard));
                 GameManager.getInstance().decideWhoTake(GamePageLogic.getInstance().getMyLastPlayedCard(),localCard,PLAY_FLOW.PLAY);

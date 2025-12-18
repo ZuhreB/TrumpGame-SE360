@@ -4,13 +4,41 @@ import src.GamePage.GamePageUI;
 
 public class GameState {
     User me = new User();
-     User opponent = new User();
-     private String secilen_trump;
-     private PLAY_FLOW playFlow;
-     private int gameId= -1;// database de game_id nin tuttuğu değer her hamlede bu id ye göre eklencek
-     private static GameState instance= new GameState();
+    User opponent = new User();
+    private String secilen_trump;
+    private PLAY_FLOW playFlow;
+    private int gameId= -1;// database de game_id nin tuttuğu değer her hamlede bu id ye göre eklencek
+    private int turnStep=1;
+    private int hostId=-1;
+    private int guestId=-1;
+    private static GameState instance= new GameState();
 
-     private GameState(){}
+    public int getHostId() {
+        return hostId;
+    }
+
+    public void setHostId(int hostId) {
+        this.hostId = hostId;
+    }
+
+    public int getGuestId() {
+        return guestId;
+    }
+
+    public void setGuestId(int guestId) {
+        this.guestId = guestId;
+    }
+
+    public int getTurnStep() {
+        return turnStep;
+    }
+
+    public void setTurnStep(int turnStep) {
+        this.turnStep = turnStep;
+    }
+
+
+    private GameState(){}
 
     public  void setMe(User me) {
         this.me = me;

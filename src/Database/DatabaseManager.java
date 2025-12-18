@@ -1,6 +1,7 @@
 package src.Database;
 
 import src.Model.Card;
+import src.Model.GameState;
 import src.Model.PLAY_FLOW;
 
 import java.sql.*;
@@ -120,6 +121,7 @@ public class DatabaseManager {
             ps.setString(7, flow.toString());
             ps.executeUpdate();
         } catch (SQLException e) { e.printStackTrace(); }
+        GameState.getInstance().setTurnStep(GameState.getInstance().getTurnStep()+1);
     }
 
     // Skoru güncelliyo game id ye göre hangi oyunsa
@@ -145,5 +147,34 @@ public class DatabaseManager {
             psUser.setInt(1, winnerUserId);
             psUser.executeUpdate();
         } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    public int getWinnerId(int gameId) {
+        int winnerId = -1;
+        String query = "SELECT " +
+                "CASE " +
+                "    WHEN host_score > guest_score THEN host_user_id " +
+                "    WHEN guest_score > host_score THEN guest_user_id " +
+                "    ELSE NULL " +
+                "END AS kazanan_id " +
+                "FROM Games WHERE game_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, gameId); // oyunun ıd sini veriyom querye
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    winnerId = rs.getInt("kazanan_id");
+
+                    // Eğer skorlar eşitse veya veri gelmediyse SQL NULL dönüyo
+                    // rs.getInt() ise 0 dönüyo o yüzden kontrol ekledim
+                    if (rs.wasNull()) {
+                        return -1; // berabere kalınca -1 döncek
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return winnerId;
     }
 }

@@ -112,6 +112,13 @@ public class GamePageLogic {
         }
         System.out.println("Koz:"+selectedTrump);
         GameState.getInstance().setSecilen_trump(selectedTrump);
+
+        // --- GUEST İÇİN DATABASE KAYDI ---
+        GameState.getInstance().setHostId(DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getOpponent().getNickName()+"host"));
+        GameState.getInstance().setGuestId(DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getMe().getNickName()+"guest"));
+        GameState.getInstance().setDbGameId(DatabaseManager.getInstance().createGame(GameState.getInstance().getHostId(), GameState.getInstance().getGuestId(), selectedTrump));
+
+
         Connection.getInstance().makeMapAndSend(MessageType.TRUMP,selectedTrump);
         GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY);
         GameState.getInstance().getInstance().makeAllCardsVisible();
@@ -126,7 +133,7 @@ public class GamePageLogic {
             // oynadığım hamleyi kaydediyorum
             int gameId = GameState.getInstance().getDbGameId();
             int myId = DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getMe().getNickName());
-            if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, myId, card, 1, PLAY_FLOW.PLAY);
+            if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, myId, card, GameState.getInstance().getTurnStep(), PLAY_FLOW.PLAY);
 
             Connection.getInstance().makeMapAndSend(MessageType.PLAYED,card);
             GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
@@ -134,7 +141,7 @@ public class GamePageLogic {
             // oynadığım hamleyi kaydediyorum
             int gameId = GameState.getInstance().getDbGameId();
             int myId = DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getMe().getNickName());
-            if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, myId, card, 1, PLAY_FLOW.PLAY_BACK);
+            if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, myId, card, GameState.getInstance().getTurnStep(), PLAY_FLOW.PLAY_BACK);
 
             Connection.getInstance().makeMapAndSend(MessageType.PLAYED_BACK,card);
             GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
