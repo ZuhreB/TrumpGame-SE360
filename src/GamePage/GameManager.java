@@ -47,29 +47,27 @@ public class GameManager {
 
     void afterDecideWhoTakeCard(Card myCard,Card opponentCard){
         int gameId= GameState.getInstance().getDbGameId();
-        if(!GameFinish()){
-            myCard.setOwner(winner);
-            opponentCard.setOwner(winner);
-            myCard.setTaken(true);
-            opponentCard.setTaken(true);
+        myCard.setOwner(winner);
+        opponentCard.setOwner(winner);
+        myCard.setTaken(true);
+        opponentCard.setTaken(true);
 
-            winner.getTaken_cards().addAll(List.of(myCard, opponentCard));
-            if(!winner.isAbleToSeeHandCards()&&winner==GameState.getInstance().getMe()) winner.setAbleToSeeHandCards(true);
+        winner.getTaken_cards().addAll(List.of(myCard, opponentCard));
+        if(!winner.isAbleToSeeHandCards()&&winner==GameState.getInstance().getMe()) winner.setAbleToSeeHandCards(true);
 
-            // bu aşamada kazanan belli olduğu için score u güncelliycem
-            // kimin elinde ne kadar kart çok kart varsa o kazanacağı için her kart bir puan gibi düşünüp size'ları vericem
-            if(gameId != -1){
-                int myScore = GameState.getInstance().getMe().getTaken_cards().size();
-                int opponentScore = GameState.getInstance().getOpponent().getTaken_cards().size();
-                DatabaseManager.getInstance().updateGameScore(gameId, opponentScore, myScore);
-            }
-            if(GameState.getInstance().getMe().equals(winner)){
-                System.out.println("GAZANDIM");
-                GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY);
-            }
-        }else{
+        // bu aşamada kazanan belli olduğu için score u güncelliycem
+        // kimin elinde ne kadar kart çok kart varsa o kazanacağı için her kart bir puan gibi düşünüp size'ları vericem
+        if(gameId != -1){
+            int myScore = GameState.getInstance().getMe().getTaken_cards().size();
+            int opponentScore = GameState.getInstance().getOpponent().getTaken_cards().size();
+            DatabaseManager.getInstance().updateGameScore(gameId, opponentScore, myScore);
+        }
+        if(GameFinish()){
             int winnerId=DatabaseManager.getInstance().getWinnerId(gameId);
             DatabaseManager.getInstance().finishGame(gameId,winnerId);
+        } else if(GameState.getInstance().getMe().equals(winner)){
+            System.out.println("GAZANDIM");
+            GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY);
         }
 
     }

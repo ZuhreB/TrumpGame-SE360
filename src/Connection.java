@@ -185,8 +185,8 @@ public class Connection {
                 System.out.println(card.getNumber()+" "+card.getType());
                 // rakibimin hamlesiini tam burada kaydedebilirim
                 int gameId = GameState.getInstance().getDbGameId();
-                int opponentUserId = DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getOpponent().getNickName());
-                if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, opponentUserId, card, GameState.getInstance().getTurnStep(), PLAY_FLOW.PLAY);
+                int opponentUserId = (GameState.getInstance().getMe().getRole() == Role.HOST) ?
+                        GameState.getInstance().getGuestId() : GameState.getInstance().getHostId();if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, opponentUserId, card, GameState.getInstance().getTurnStep(), PLAY_FLOW.PLAY);
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(localCard));
 
             }else if(map.containsKey(MessageType.PLAYED_BACK)){
@@ -196,8 +196,8 @@ public class Connection {
                 System.out.println(card.getNumber()+" "+card.getType());
                 // bir de bu kısımda rakibin oynadığı kart kaydedilir
                 int gameId = GameState.getInstance().getDbGameId();
-                int opponentUserId = DatabaseManager.getInstance().getOrCreateUser(GameState.getInstance().getOpponent().getNickName());
-                if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, opponentUserId, card, GameState.getInstance().getTurnStep(), PLAY_FLOW.PLAY_BACK);
+                int opponentUserId = (GameState.getInstance().getMe().getRole() == Role.HOST) ?
+                        GameState.getInstance().getGuestId() : GameState.getInstance().getHostId();if(gameId != -1) DatabaseManager.getInstance().saveMove(gameId, opponentUserId, card, GameState.getInstance().getTurnStep(), PLAY_FLOW.PLAY_BACK);
 
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(localCard));
                 GameManager.getInstance().decideWhoTake(GamePageLogic.getInstance().getMyLastPlayedCard(),localCard,PLAY_FLOW.PLAY);
