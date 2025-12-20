@@ -145,10 +145,6 @@ public class Connection {
         if(obj instanceof User user){
             if(user.getRole()== Role.HOST){
                 GameState.getInstance().setOpponent(user);
-                for(Card card:GameState.getInstance().getOpponent().getBoard_cards()){
-                    System.out.print(card.getNumber()+" "+card.getType()+" ");
-                }
-                System.out.println();
             }else if(user.getRole()==Role.GUEST){
                 // Host'tan gelen obje yerel nickname'i ezmesin diye koruyoruz
                 String currentNick = GameState.getInstance().getMe().getNickName();
@@ -166,15 +162,7 @@ public class Connection {
             if(map.containsKey(MessageType.TRUMP)){
                String trump= (String)map.get(MessageType.TRUMP);
                 GameState.getInstance().setSecilen_trump(trump);
-
-                // bu kısımda trump mesajını guest hosta attığı için bu aşamada host = me ve oyunu bu aşamada host için başlatabiliriz
-                GameState.getInstance().setHostId(DatabaseManager.getInstance().getOrCreateUser(
-                        GameState.getInstance().getMe().getNickName()+"host"));
-                GameState.getInstance().setGuestId(DatabaseManager.getInstance().getOrCreateUser(
-                        GameState.getInstance().getOpponent().getNickName()+"guest"));
-                GameState.getInstance().setDbGameId(DatabaseManager.getInstance().createGame(
-                        GameState.getInstance().getHostId(),GameState.getInstance().getGuestId(),trump));
-
+                GamePageLogic.getInstance().getUsersAndCreateGame(trump);
                 GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
                 GameState.getInstance().makeAllCardsVisible();
                 GamePageUI.getInstace().refreshGrids();
@@ -184,8 +172,6 @@ public class Connection {
                 GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY_BACK);
                 Card card= (Card)map.get(MessageType.PLAYED);
                 Card localCard =GamePageLogic.getInstance().findLocalCard(card);
-                System.out.println(card.getNumber()+" "+card.getType());
-                // rakibin hamlesiini tam burada kaydedebiliriz
                 int opponentUserId = (GameState.getInstance().getMe().getRole() == Role.HOST) ?
                         GameState.getInstance().getGuestId() : GameState.getInstance().getHostId();
                 if(GameState.getInstance().getDbGameId()!= -1) {
@@ -197,8 +183,6 @@ public class Connection {
                 GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
                 Card card= (Card)map.get(MessageType.PLAYED_BACK);
                 Card localCard =GamePageLogic.getInstance().findLocalCard(card);
-                System.out.println(card.getNumber()+" "+card.getType());
-                // bir de bu kısımda rakibin oynadığı kart kaydedilir
                 int opponentUserId = (GameState.getInstance().getMe().getRole() == Role.HOST) ?
                         GameState.getInstance().getGuestId() : GameState.getInstance().getHostId();
                 if(GameState.getInstance().getDbGameId() != -1) {
@@ -223,10 +207,8 @@ public class Connection {
 
     public <T> void  sendObject(T obj){
         if(out!=null){
-            System.out.println("out null değil");
             try{
                 out.reset();
-                System.out.println("gönderiliyor"+obj.toString());
                 out.writeObject(obj);
                 out.flush();
             }catch (IOException e){
@@ -253,4 +235,6 @@ public class Connection {
             GameLogic.getInstance().showGameMessage("Bağlantılar kapatılırken hata oluştu: " + e.getMessage());
         }
     }
+
+
 }

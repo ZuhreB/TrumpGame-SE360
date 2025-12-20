@@ -21,9 +21,7 @@ public class GamePageLogic {
             Card.initAllCards();
             Card.shuffleAllCards();
             giveCardsToTheUser();
-
             initTrumpMoment();
-
             Connection.getInstance().sendObject(GameState.getInstance().getMe());
             Connection.getInstance().sendObject(GameState.getInstance().getOpponent());
         }
@@ -35,7 +33,7 @@ public class GamePageLogic {
         ArrayList<Card> opponentBoardCards=new ArrayList<>();
         ArrayList<Card> myHandCards=new ArrayList<>();
         ArrayList<Card> opponentHandCards=new ArrayList<>();
-        System.out.println(allCards.size());
+
 
         for(int i=0;i<20;i++){
             myBoardCards.add(allCards.get(i));
@@ -69,7 +67,6 @@ public class GamePageLogic {
 
                 });
             }
-            /// FONKSİYON BURAYA GELECEK.
         } else if (GameState.getInstance().getOpponent().getRole()==Role.GUEST) {
             ArrayList<Card> opponentBoardCards = GameState.getInstance().getOpponent().getBoard_cards();
             if (opponentBoardCards != null && opponentBoardCards.size() >= 20) {
@@ -81,13 +78,7 @@ public class GamePageLogic {
                 });
             }
         }
-        for(Card card: GameState.getInstance().getMe().getBoard_cards()){
-            System.out.print(card.isClose());
-        }
-        System.out.println("-------------------");
-        for(Card card: GameState.getInstance().getOpponent().getBoard_cards()){
-            System.out.print(card.isClose());
-        }
+
     }
 
     private void askForTrump(){
@@ -108,20 +99,10 @@ public class GamePageLogic {
             case 1: selectedTrump = "hearts"; break;
             case 2: selectedTrump = "clubs"; break;
             case 3: selectedTrump = "diamonds"; break;
-            default: selectedTrump = "spades"; // bu varsayılan olcak hiç bişi seçmeden kapatırsa diye
+            default: selectedTrump = "spades";
         }
-        System.out.println("Koz:"+selectedTrump);
         GameState.getInstance().setSecilen_trump(selectedTrump);
-
-        // Guest için database kaydı
-        GameState.getInstance().setHostId(DatabaseManager.getInstance().getOrCreateUser(
-                GameState.getInstance().getOpponent().getNickName()+"host"));
-        GameState.getInstance().setGuestId(DatabaseManager.getInstance().getOrCreateUser(
-                GameState.getInstance().getMe().getNickName()+"guest"));
-        GameState.getInstance().setDbGameId(DatabaseManager.getInstance().createGame(
-                GameState.getInstance().getHostId(), GameState.getInstance().getGuestId(), selectedTrump));
-
-
+        getUsersAndCreateGame(selectedTrump);
         Connection.getInstance().makeMapAndSend(MessageType.TRUMP,selectedTrump);
         GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY);
         GameState.getInstance().getInstance().makeAllCardsVisible();
@@ -133,7 +114,6 @@ public class GamePageLogic {
         if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.WAIT){
             GameLogic.getInstance().showGameMessage("YOU CAN NOT PLAY NOW WAIT");
         }else if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY){
-            // oynadığım hamleyi kaydediyorum
             int myId = (GameState.getInstance().getMe().getRole() == Role.HOST) ?
                     GameState.getInstance().getHostId() : GameState.getInstance().getGuestId();
             if(GameState.getInstance().getDbGameId()!= -1) {
@@ -143,7 +123,7 @@ public class GamePageLogic {
             Connection.getInstance().makeMapAndSend(MessageType.PLAYED,card);
             GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
         }else if (GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY_BACK){
-            // oynadığım hamleyi kaydediyorum
+            
             int myId = (GameState.getInstance().getMe().getRole() == Role.HOST) ?
                     GameState.getInstance().getHostId() : GameState.getInstance().getGuestId();
             if(GameState.getInstance().getDbGameId() != -1) {
@@ -184,6 +164,16 @@ public class GamePageLogic {
 
     public Card getMyLastPlayedCard(){
         return (Card) GamePageUI.getInstace().getSelectedCardPanel().getClientProperty("card");
+    }
+    public void getUsersAndCreateGame(String trump){
+        // bu kısımda trump mesajını guest hosta attığı için bu aşamada host = me ve oyunu bu aşamada host için başlatabiliriz
+        GameState.getInstance().setHostId(DatabaseManager.getInstance().getOrCreateUser(
+                GameState.getInstance().getMe().getNickName()+"host"));
+        GameState.getInstance().setGuestId(DatabaseManager.getInstance().getOrCreateUser(
+                GameState.getInstance().getOpponent().getNickName()+"guest"));
+        GameState.getInstance().setDbGameId(DatabaseManager.getInstance().createGame(
+                GameState.getInstance().getHostId(),GameState.getInstance().getGuestId()));
+
     }
 
 }

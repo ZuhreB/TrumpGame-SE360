@@ -22,7 +22,7 @@ public class DatabaseManager {
         }
     }
 
-    public static synchronized DatabaseManager getInstance() {
+    public static DatabaseManager getInstance() {
         if (instance == null) {
             instance = new DatabaseManager();
         }
@@ -90,7 +90,8 @@ public class DatabaseManager {
         return -1;
     }
 
-    public int createGame(int hostId, int guestId, String trump) {
+    public int createGame(int hostId, int guestId) {
+        String trump=GameState.getInstance().getSecilen_trump();
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Games (host_user_id, guest_user_id, trump_suit) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, hostId);
