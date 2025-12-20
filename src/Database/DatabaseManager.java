@@ -32,7 +32,6 @@ public class DatabaseManager {
     private void createTables() throws SQLException {
         Statement stmt = connection.createStatement();
 
-        // USERS Tablosu
         String usersTable = "CREATE TABLE IF NOT EXISTS Users (" +
                 "user_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "nickname TEXT NOT NULL UNIQUE, " +
@@ -40,7 +39,6 @@ public class DatabaseManager {
                 "losses INTEGER DEFAULT 0, " +
                 "created_at DATETIME DEFAULT CURRENT_TIMESTAMP)";
 
-        // GAMES Tablosu
         String gamesTable = "CREATE TABLE IF NOT EXISTS Games (" +
                 "game_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "host_user_id INTEGER NOT NULL, " +
@@ -55,7 +53,6 @@ public class DatabaseManager {
                 "FOREIGN KEY (guest_user_id) REFERENCES Users(user_id), " +
                 "FOREIGN KEY (winner_user_id) REFERENCES Users(user_id))";
 
-        // MOVES Tablosu
         String movesTable = "CREATE TABLE IF NOT EXISTS Moves (" +
                 "move_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "game_id INTEGER NOT NULL, " +
@@ -74,7 +71,6 @@ public class DatabaseManager {
         stmt.execute(movesTable);
     }
 
-    // Kullanıcıyı bulur veya yoksa oluşturur id döner eğer yoksa da -1 dönücek
     public int getOrCreateUser(String nickname) {
         try {
             if(nickname==null){
@@ -94,7 +90,6 @@ public class DatabaseManager {
         return -1;
     }
 
-    // Yeni oyun oluşturcak sonrada oyunun id sini döncek
     public int createGame(int hostId, int guestId, String trump) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Games (host_user_id, guest_user_id, trump_suit) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
@@ -108,8 +103,9 @@ public class DatabaseManager {
         return -1;
     }
 
-    // Hamleleri kaydediyom
-    public void saveMove(int gameId, int userId, Card card, int turnStep, PLAY_FLOW flow) {
+    public void saveMove(int userId, Card card, PLAY_FLOW flow) {
+        int turnStep = GameState.getInstance().getTurnStep();
+        int gameId = GameState.getInstance().getDbGameId();
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Moves (game_id, user_id, card_type, card_number, card_power, turn_step, play_flow_type) VALUES (?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, gameId);
@@ -124,8 +120,8 @@ public class DatabaseManager {
         GameState.getInstance().setTurnStep(GameState.getInstance().getTurnStep()+1);
     }
 
-    // Skoru güncelliyo game id ye göre hangi oyunsa
-    public void updateGameScore(int gameId, int hostScore, int guestScore) {
+    public void updateGameScore(int hostScore, int guestScore) {
+        int gameId = GameState.getInstance().getDbGameId();
         try {
             PreparedStatement ps = connection.prepareStatement("UPDATE Games SET host_score = ?, guest_score = ? WHERE game_id = ?");
             ps.setInt(1, hostScore);
@@ -135,8 +131,8 @@ public class DatabaseManager {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    // Oyunu sonlandırcak yani statusü finishliyo bi de kazanna kişiyi belirleyecek onun win sayısını arttırcaak
-    public void finishGame(int gameId, int winnerUserId) {
+    public void finishGame(int winnerUserId) {
+        int gameId= GameState.getInstance().getDbGameId();
         try {
             PreparedStatement ps = connection.prepareStatement("UPDATE Games SET winner_user_id = ?, game_status = 'FINISHED' WHERE game_id = ?");
             ps.setInt(1, winnerUserId);
@@ -149,8 +145,9 @@ public class DatabaseManager {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public int getWinnerId(int gameId) {
+    public int getWinnerId() {
         int winnerId = -1;
+        int gameId=GameState.getInstance().getDbGameId();
         String query = "SELECT " +
                 "CASE " +
                 "    WHEN host_score > guest_score THEN host_user_id " +
@@ -160,15 +157,13 @@ public class DatabaseManager {
                 "FROM Games WHERE game_id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, gameId); // oyunun ıd sini veriyom querye
+            ps.setInt(1, gameId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     winnerId = rs.getInt("kazanan_id");
 
-                    // Eğer skorlar eşitse veya veri gelmediyse SQL NULL dönüyo
-                    // rs.getInt() ise 0 dönüyo o yüzden kontrol ekledim
                     if (rs.wasNull()) {
-                        return -1; // berabere kalınca -1 döncek
+                        return -1;
                     }
                 }
             }

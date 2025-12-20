@@ -134,22 +134,20 @@ public class GamePageLogic {
             GameLogic.getInstance().showGameMessage("YOU CAN NOT PLAY NOW WAIT");
         }else if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY){
             // oynadığım hamleyi kaydediyorum
-            int gameId = GameState.getInstance().getDbGameId();
             int myId = (GameState.getInstance().getMe().getRole() == Role.HOST) ?
                     GameState.getInstance().getHostId() : GameState.getInstance().getGuestId();
-            if(gameId != -1) {
-                DatabaseManager.getInstance().saveMove(gameId, myId, card, GameState.getInstance().getTurnStep(), PLAY_FLOW.PLAY);
+            if(GameState.getInstance().getDbGameId()!= -1) {
+                DatabaseManager.getInstance().saveMove( myId, card, PLAY_FLOW.PLAY);
             }
 
             Connection.getInstance().makeMapAndSend(MessageType.PLAYED,card);
             GameState.getInstance().setPlayFlow(PLAY_FLOW.WAIT);
         }else if (GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY_BACK){
             // oynadığım hamleyi kaydediyorum
-            int gameId = GameState.getInstance().getDbGameId();
             int myId = (GameState.getInstance().getMe().getRole() == Role.HOST) ?
                     GameState.getInstance().getHostId() : GameState.getInstance().getGuestId();
-            if(gameId != -1) {
-                DatabaseManager.getInstance().saveMove(gameId, myId, card, GameState.getInstance().getTurnStep(), PLAY_FLOW.PLAY_BACK);
+            if(GameState.getInstance().getDbGameId() != -1) {
+                DatabaseManager.getInstance().saveMove(myId, card, PLAY_FLOW.PLAY_BACK);
             }
 
             Connection.getInstance().makeMapAndSend(MessageType.PLAYED_BACK,card);

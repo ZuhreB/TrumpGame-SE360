@@ -167,7 +167,7 @@ public class Connection {
                String trump= (String)map.get(MessageType.TRUMP);
                 GameState.getInstance().setSecilen_trump(trump);
 
-                // bu kısımda trump mesajını guest hosta attığı için bu aşamada host= me ve oyunu bu aşamada host için başlatabilirim
+                // bu kısımda trump mesajını guest hosta attığı için bu aşamada host = me ve oyunu bu aşamada host için başlatabiliriz
                 GameState.getInstance().setHostId(DatabaseManager.getInstance().getOrCreateUser(
                         GameState.getInstance().getMe().getNickName()+"host"));
                 GameState.getInstance().setGuestId(DatabaseManager.getInstance().getOrCreateUser(
@@ -185,12 +185,11 @@ public class Connection {
                 Card card= (Card)map.get(MessageType.PLAYED);
                 Card localCard =GamePageLogic.getInstance().findLocalCard(card);
                 System.out.println(card.getNumber()+" "+card.getType());
-                // rakibimin hamlesiini tam burada kaydedebilirim
-                int gameId = GameState.getInstance().getDbGameId();
+                // rakibin hamlesiini tam burada kaydedebiliriz
                 int opponentUserId = (GameState.getInstance().getMe().getRole() == Role.HOST) ?
                         GameState.getInstance().getGuestId() : GameState.getInstance().getHostId();
-                if(gameId != -1) {
-                    DatabaseManager.getInstance().saveMove(gameId, opponentUserId, card, GameState.getInstance().getTurnStep(), PLAY_FLOW.PLAY);
+                if(GameState.getInstance().getDbGameId()!= -1) {
+                    DatabaseManager.getInstance().saveMove(opponentUserId, card, PLAY_FLOW.PLAY);
                 }
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(localCard));
 
@@ -200,13 +199,11 @@ public class Connection {
                 Card localCard =GamePageLogic.getInstance().findLocalCard(card);
                 System.out.println(card.getNumber()+" "+card.getType());
                 // bir de bu kısımda rakibin oynadığı kart kaydedilir
-                int gameId = GameState.getInstance().getDbGameId();
                 int opponentUserId = (GameState.getInstance().getMe().getRole() == Role.HOST) ?
                         GameState.getInstance().getGuestId() : GameState.getInstance().getHostId();
-                if(gameId != -1) {
-                    DatabaseManager.getInstance().saveMove(gameId, opponentUserId, card, GameState.getInstance().getTurnStep(), PLAY_FLOW.PLAY_BACK);
+                if(GameState.getInstance().getDbGameId() != -1) {
+                    DatabaseManager.getInstance().saveMove(opponentUserId, card, PLAY_FLOW.PLAY_BACK);
                 }
-
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(localCard));
                 GameManager.getInstance().decideWhoTake(GamePageLogic.getInstance().getMyLastPlayedCard(),localCard,PLAY_FLOW.PLAY);
             }

@@ -47,7 +47,7 @@ public class GameManager {
     }
 
     void afterDecideWhoTakeCard(Card myCard,Card opponentCard){
-        int gameId= GameState.getInstance().getDbGameId();
+
         myCard.setOwner(winner);
         opponentCard.setOwner(winner);
         myCard.setTaken(true);
@@ -56,18 +56,17 @@ public class GameManager {
         winner.getTaken_cards().addAll(List.of(myCard, opponentCard));
         if(!winner.isAbleToSeeHandCards()&&winner==GameState.getInstance().getMe()) winner.setAbleToSeeHandCards(true);
 
-        // bu aşamada kazanan belli olduğu için score u güncelliycem
-        // kimin elinde ne kadar kart çok kart varsa o kazanacağı için her kart bir puan gibi düşünüp size'ları vericem
-        if(gameId != -1){
+        // bu aşamada kazanan belli olduğu için score' güncelleyebiliriz
+        // kimin elinde ne kadar çok kart varsa o kazanacağı için her kart bir puan gibi düşünüp size'ları veriyoruz score olarak
+        if(GameState.getInstance().getDbGameId() != -1){
             int myScore = GameState.getInstance().getMe().getTaken_cards().size();
             int opponentScore = GameState.getInstance().getOpponent().getTaken_cards().size();
-            DatabaseManager.getInstance().updateGameScore(gameId, opponentScore, myScore);
+            DatabaseManager.getInstance().updateGameScore(opponentScore, myScore);
         }
         if(GameFinish()){
-            int winnerId=DatabaseManager.getInstance().getWinnerId(gameId);
-            DatabaseManager.getInstance().finishGame(gameId,winnerId);
+            int winnerId=DatabaseManager.getInstance().getWinnerId();
+            DatabaseManager.getInstance().finishGame(winnerId);
         } else if(GameState.getInstance().getMe().equals(winner)){
-            System.out.println("GAZANDIM");
             GameState.getInstance().setPlayFlow(PLAY_FLOW.PLAY);
         }
 

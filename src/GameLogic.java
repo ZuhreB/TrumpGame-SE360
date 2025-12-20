@@ -32,14 +32,7 @@ public class GameLogic {
 
     public void returnToMainPage(){
         GamePageUI.getInstace().dispose();
-        new Thread(() -> {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            SwingUtilities.invokeLater(() -> MainPageUI.getInstance().setVisible(true));
-        }).start();
+        SwingUtilities.invokeLater(() -> MainPageUI.getInstance().setVisible(true));
     }
 
     public void joinGameAsHost(String nickname) {
