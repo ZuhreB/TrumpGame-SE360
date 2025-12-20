@@ -71,17 +71,6 @@ public class GameLogic {
         }
     }
 
-    public void sendMessage(String message) {
-        if (Connection.getInstance() != null) {
-            showGameMessage("Siz: " + message);
-            Connection.getInstance().sendMessage(message);
-        }
-    }
-
-    public void handleOpponentInput(String message) {
-        showGameMessage("Rakip: " + message);
-    }
-
     public void showGameMessage(String message) {
         if (gameGui != null) {
             JOptionPane.showMessageDialog(gameGui,message);

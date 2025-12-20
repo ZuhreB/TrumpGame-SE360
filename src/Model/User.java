@@ -7,12 +7,10 @@ import java.util.ArrayList;
 
 public class User implements Serializable {
     String nickName ="Player";
-    int score;
     Role role;
     ArrayList<Card> board_cards= new ArrayList<>();
     ArrayList<Card> hand_cards= new ArrayList<>();
     ArrayList<Card> taken_cards= new ArrayList<>();
-    boolean isMyTurn;
     boolean isAbleToSeeHandCards=false;
 
     public String getNickName() {
@@ -21,14 +19,6 @@ public class User implements Serializable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
     }
 
     public Role getRole() {
@@ -57,18 +47,6 @@ public class User implements Serializable {
 
     public ArrayList<Card> getTaken_cards() {
         return taken_cards;
-    }
-
-    public void setTaken_cards(ArrayList<Card> taken_cards) {
-        this.taken_cards = taken_cards;
-    }
-
-    public boolean isMyTurn() {
-        return isMyTurn;
-    }
-
-    public void setMyTurn(boolean myTurn) {
-        isMyTurn = myTurn;
     }
 
     public boolean isAbleToSeeHandCards() {

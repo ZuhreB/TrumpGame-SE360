@@ -391,13 +391,4 @@ public class GamePageUI extends JFrame {
     public static GamePageUI getInstace() {
         return instace;
     }
-
-
-    public void setOpponentSelectedCardPanel(JPanel opponentSelectedCardPanel) {
-        this.opponentSelectedCardPanel = opponentSelectedCardPanel;
-    }
-
-    public void setOpponnentPlayedHandCardPanel(JPanel opponnentPlayedHandCardPanel) {
-        this.opponnentPlayedHandCardPanel = opponnentPlayedHandCardPanel;
-    }
 }

@@ -59,7 +59,7 @@ public class Connection {
 
                         GamePageLogic.getInstance().startHostGame();
 
-                        listenOpponent(clientSocket);
+                        listenOpponent();
                     } catch (IOException e) {
                         GameLogic.getInstance().showGameMessage("Oyun başlatılamadı: " + e.getMessage());
                     } catch (InterruptedException e) {
@@ -108,7 +108,7 @@ public class Connection {
                         GameLogic.getInstance().startGamePage();
                     });
 
-                    listenOpponent(socket);
+                    listenOpponent();
 
                 } catch (IOException e) {
                     GameLogic.getInstance().showGameMessage("Oyun başlatılamadı: " + e.getMessage());
@@ -124,11 +124,10 @@ public class Connection {
         }).start();
     }
 
-    private void listenOpponent(Socket socket) throws IOException {
+    private void listenOpponent() throws IOException {
 
         Thread listenerThread = new Thread(() -> {
             try {
-                System.out.println(out);
                 while (true) {
                     Object obj = in.readObject();
                     controlMessage(obj);
@@ -223,16 +222,7 @@ public class Connection {
 
     }
 
-    public void sendMessage(String message) {
-        if (out != null) {
-            try {
-                out.writeObject(message);
-                out.flush();
-            } catch (IOException e) {
-                GameLogic.getInstance().showGameMessage("Mesaj gönderilemedi:" + e.getMessage());
-            }
-        }
-    }
+
 
     public <T> void  sendObject(T obj){
         if(out!=null){

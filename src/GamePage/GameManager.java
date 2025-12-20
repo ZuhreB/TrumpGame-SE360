@@ -74,74 +74,34 @@ public class GameManager {
     }
 
     public boolean controlIfClickable(Card intedtedCard, Card opponentCard) {
-        // 1. Metoda giriş logları: Parametreleri ve genel durumu yazdırıyoruz
-        System.out.println("--- DEBUG: controlIfClickable BAŞLADI ---");
-        System.out.println("[DEBUG] Oynanmak istenen kart (intedtedCard): " + intedtedCard + " | Tipi: " + (intedtedCard != null ? intedtedCard.getType() : "NULL"));
-        System.out.println("[DEBUG] Rakip kart (opponentCard): " + opponentCard + " | Tipi: " + (opponentCard != null ? opponentCard.getType() : "NULL"));
-        System.out.println("[DEBUG] Mevcut Oyun Akışı (PlayFlow): " + GameState.getInstance().getPlayFlow());
-
         if (GameState.getInstance().getPlayFlow() == PLAY_FLOW.PLAY_BACK) {
-            System.out.println("[DEBUG] Akış PLAY_BACK modunda. Kurallar kontrol ediliyor...");
-
             // 2. Renk Eşleşmesi Kontrolü
             if (intedtedCard.getType().equals(opponentCard.getType())) {
-                System.out.println("[DEBUG] Kart tipleri EŞLEŞİYOR. Hamle geçerli.");
-                System.out.println("--- DEBUG: controlIfClickable BİTTİ (TRUE) ---");
                 return true;
-            } else {
-                System.out.println("[DEBUG] Kart tipleri EŞLEŞMEDİ. Elde mecburi renk var mı bakılıyor...");
             }
-
             // 3. Elde rakibin renginden var mı kontrolü (Mecburiyet kuralı)
-            System.out.println("[DEBUG] Döngü: Eldeki oynanabilir kartlar taranıyor...");
             for (Card card : getPlayableCards()) {
                 // Döngü çok şişmesin diye sadece eşleşme bulunursa detay yazdırıyoruz,
                 // ama her kartı görmek istersen buraya da print atabilirsin.
                 if (card.getType().equals( opponentCard.getType())) {
-                    System.out.println("a"); // Senin orijinal logun
-                    System.out.println("[DEBUG] KURAL İHLALİ: Elde rakibin renginden (" + opponentCard.getType() + ") kart bulundu: " + card);
-
                     GameLogic.getInstance().showGameMessage("Rakibinizle aynı tipten - " + opponentCard.getType() + " -kart oynamalısınız");
-
-                    System.out.println("--- DEBUG: controlIfClickable BİTTİ (FALSE - Renk Mecburiyeti) ---");
                     return false;
                 }
             }
-            System.out.println("[DEBUG] Elde rakibin renginden KART YOK. Koz kontrolüne geçiliyor.");
-
             // 4. Koz Kontrolü (Renk yoksa koz atma zorunluluğu)
             String currentTrump = GameState.getInstance().getSecilen_trump();
-            System.out.println("[DEBUG] Geçerli Koz (Trump): " + currentTrump);
-
             // Eğer oynamak istediğimiz kart koz değilse, elimizde koz var mı diye bakıyoruz
             if (!intedtedCard.getType().equals(currentTrump)) {
-                System.out.println("benim tip "+intedtedCard.getType()+" koz da "+currentTrump);
-                System.out.println("[DEBUG] Seçilen kart KOZ DEĞİL. Elde koz var mı diye bakılıyor...");
-
                 for (Card card : getPlayableCards()) {
                     System.out.println(card.getNumber()+" "+card.getType());
                     if (card.getType().equals(currentTrump)) {
-                        System.out.println("b"); // Senin orijinal logun
-                        System.out.println("[DEBUG] KURAL İHLALİ: Elde KOZ bulundu: " + card + ". Renk yoksa koz oynanmalı.");
-
                         GameLogic.getInstance().showGameMessage("Aynı tipten kartınız yok ve kozunuz varsa koz oynamalısınız-" + currentTrump + "-");
-
-                        System.out.println("--- DEBUG: controlIfClickable BİTTİ (FALSE - Koz Mecburiyeti) ---");
                         return false;
                     }
                 }
-                System.out.println("[DEBUG] Elde koz da yok (veya oynama zorunluluğu yok). Hamle serbest.");
-                System.out.println("--- DEBUG: controlIfClickable BİTTİ (TRUE) ---");
-                return true;
-            } else {
-                System.out.println("[DEBUG] Oynanmak istenen kart zaten KOZ. Hamle geçerli.");
+               return true;
             }
-
-        } else {
-            System.out.println("[DEBUG] Akış PLAY_BACK değil. Doğrudan izin veriliyor.");
         }
-
-        System.out.println("--- DEBUG: controlIfClickable BİTTİ (TRUE - Final) ---");
         return true;
     }
 
