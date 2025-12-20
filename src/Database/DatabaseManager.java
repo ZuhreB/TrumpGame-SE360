@@ -93,7 +93,9 @@ public class DatabaseManager {
     public int createGame(int hostId, int guestId) {
         String trump=GameState.getInstance().getSecilen_trump();
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO Games (host_user_id, guest_user_id, trump_suit) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Games " +
+                    "(host_user_id, guest_user_id, trump_suit) " +
+                    "VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, hostId);
             ps.setInt(2, guestId);
             ps.setString(3, trump);
@@ -108,7 +110,9 @@ public class DatabaseManager {
         int turnStep = GameState.getInstance().getTurnStep();
         int gameId = GameState.getInstance().getDbGameId();
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO Moves (game_id, user_id, card_type, card_number, card_power, turn_step, play_flow_type) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Moves " +
+                    "(game_id, user_id, card_type, card_number, card_power, turn_step, play_flow_type) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, gameId);
             ps.setInt(2, userId);
             ps.setString(3, card.getType());
@@ -124,7 +128,8 @@ public class DatabaseManager {
     public void updateGameScore(int hostScore, int guestScore) {
         int gameId = GameState.getInstance().getDbGameId();
         try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE Games SET host_score = ?, guest_score = ? WHERE game_id = ?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Games SET host_score = ?, guest_score = ? " +
+                    "WHERE game_id = ?");
             ps.setInt(1, hostScore);
             ps.setInt(2, guestScore);
             ps.setInt(3, gameId);
@@ -135,12 +140,14 @@ public class DatabaseManager {
     public void finishGame(int winnerUserId) {
         int gameId= GameState.getInstance().getDbGameId();
         try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE Games SET winner_user_id = ?, game_status = 'FINISHED' WHERE game_id = ?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Games " +
+                    "SET winner_user_id = ?, game_status = 'FINISHED' WHERE game_id = ?");
             ps.setInt(1, winnerUserId);
             ps.setInt(2, gameId);
             ps.executeUpdate();
 
-            PreparedStatement psUser = connection.prepareStatement("UPDATE Users SET wins = wins + 1 WHERE user_id = ?");
+            PreparedStatement psUser = connection.prepareStatement("UPDATE Users " +
+                    "SET wins = wins + 1 WHERE user_id = ?");
             psUser.setInt(1, winnerUserId);
             psUser.executeUpdate();
         } catch (SQLException e) { e.printStackTrace(); }
