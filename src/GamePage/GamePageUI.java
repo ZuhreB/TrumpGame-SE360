@@ -13,8 +13,8 @@ public class GamePageUI extends JFrame {
 
     private JLabel myScoreLabel;
     private JLabel opponentScoreLabel;
-    JLabel playFlowLabel= new JLabel();
-    JLabel trumpLabel= new JLabel();
+    JLabel playFlowLabel = new JLabel();
+    JLabel trumpLabel = new JLabel();
     private final Color BG_COLOR = new Color(40, 44, 52);
     private final Color PANEL_COLOR = new Color(60, 63, 65);
     private final Color TEXT_COLOR = new Color(230, 230, 230);
@@ -25,19 +25,27 @@ public class GamePageUI extends JFrame {
     private JPanel opponentSelectedCardPanel = null; // Rakibin seçtiği kartı tutar
     private JPanel opponnentPlayedHandCardPanel = new JPanel();
 
+    Card cardClosed = new Card("src/cards/card_close.jpg", "1", true, "");
 
+    private static GamePageUI instace = null;
 
-    Card cardClosed=new Card("src/cards/card_close.jpg","1",true,"");
+    public static GamePageUI getInstace() {
+        if (instace == null) {
+            instace = new GamePageUI();
+        }
+        return instace;
+    }
 
+    public static boolean hasInstance() {
+        return instace != null;
+    }
 
-    private static GamePageUI instace = new GamePageUI();
-
-
-    //SONRADAN MÜDAHELE EDİLECEK PANELLER
+    // SONRADAN MÜDAHELE EDİLECEK PANELLER
     JPanel bottomGrid;
     JPanel topGrid;
     JPanel westPanel;
     JPanel eastPanel;
+
     private GamePageUI() {
         super("Trump Game - ");
         System.out.println("game page ui constructoru başlatıldı");
@@ -73,7 +81,7 @@ public class GamePageUI extends JFrame {
         westPanel.setLayout(new BoxLayout(westPanel, BoxLayout.Y_AXIS));
         westPanel.setBackground(PANEL_COLOR);
         westPanel.setPreferredSize(new Dimension(200, 0));
-        westPanel.setBorder(new EmptyBorder(20, 20, 20, 20));//kenarlara uzaklık ekliyor
+        westPanel.setBorder(new EmptyBorder(20, 20, 20, 20));// kenarlara uzaklık ekliyor
 
         JLabel infoTitle = new JLabel("SKOR TABLOSU");
         infoTitle.setFont(new Font("Arial", Font.BOLD, 18));
@@ -99,7 +107,6 @@ public class GamePageUI extends JFrame {
         trumpLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         opponnentPlayedHandCardPanel.setBackground(PANEL_COLOR);
 
-
         westPanel.add(infoTitle);
         westPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         westPanel.add(myScoreLabel);
@@ -116,25 +123,24 @@ public class GamePageUI extends JFrame {
         add(westPanel, BorderLayout.WEST);
 
         JPanel centerPanel = new JPanel(new GridLayout(2, 1, 0, 20));
-        //vertical gap iki gridlayout arasındaki boşluk
+        // vertical gap iki gridlayout arasındaki boşluk
         centerPanel.setBackground(BG_COLOR);
         centerPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
-        //center panel ve new Gridlayout arasındaki boşluk
+        // center panel ve new Gridlayout arasındaki boşluk
 
         topGrid = new JPanel(new GridLayout(2, 5, 10, 10));
-        //burda da kartlar arası boşluklar ayarlanıyor
+        // burda da kartlar arası boşluklar ayarlanıyor
         topGrid.setBackground(BG_COLOR);
 
-
         for (int i = 0; i < 10; i++) {
-            topGrid.add(createCardPlaceholder(cardClosed,false,true));
+            topGrid.add(createCardPlaceholder(cardClosed, false, true));
         }
 
         bottomGrid = new JPanel(new GridLayout(2, 5, 10, 10));
         bottomGrid.setBackground(BG_COLOR);
 
         for (int i = 0; i < 10; i++) {
-            bottomGrid.add(createCardPlaceholder(cardClosed,false,false));
+            bottomGrid.add(createCardPlaceholder(cardClosed, false, false));
         }
 
         centerPanel.add(topGrid);
@@ -148,7 +154,7 @@ public class GamePageUI extends JFrame {
         eastPanel.setBorder(new EmptyBorder(3, 10, 3, 10));
 
         for (int i = 0; i < 6; i++) {
-            JPanel cards = createCardPlaceholder(cardClosed,true,false);
+            JPanel cards = createCardPlaceholder(cardClosed, true, false);
             cards.setBackground(new Color(100, 149, 237));
             eastPanel.add(cards);
         }
@@ -157,46 +163,43 @@ public class GamePageUI extends JFrame {
         setVisible(true);
     }
 
-    private JPanel createCardPlaceholder(Card card,boolean isRightCard, boolean isTopGrid) {
+    private JPanel createCardPlaceholder(Card card, boolean isRightCard, boolean isTopGrid) {
         JPanel cardPanel = new JPanel(new BorderLayout());
         cardPanel.setBackground(CARD_COLOR);
-        //Kart paneliyle card objesi arasında bağıntı
+        // Kart paneliyle card objesi arasında bağıntı
         cardPanel.putClientProperty("card", card);
         cardPanel.setOpaque(false);
 
         // Card sınıfındaki static adresi kullanarak resmi yükle
-        String cardImageAdress=card.isClose()?Card.CLOSED_FACE_ADDRESS:card.getPng_address();
+        String cardImageAdress = card.isClose() ? Card.CLOSED_FACE_ADDRESS : card.getPng_address();
         ImageIcon imageIcon = new ImageIcon(cardImageAdress);
 
         // Resmi karta sığacak şekilde boyutlandır
         Image image = imageIcon.getImage();
-        if(isRightCard){
-            Image newimg = image.getScaledInstance(70, 90,  java.awt.Image.SCALE_SMOOTH);
+        if (isRightCard) {
+            Image newimg = image.getScaledInstance(70, 90, java.awt.Image.SCALE_SMOOTH);
             imageIcon = new ImageIcon(newimg);
-        }else{
-            Image newimg = image.getScaledInstance(80, 120,  java.awt.Image.SCALE_SMOOTH);
+        } else {
+            Image newimg = image.getScaledInstance(80, 120, java.awt.Image.SCALE_SMOOTH);
             imageIcon = new ImageIcon(newimg);
         }
-
 
         // Label'ı artık text ile değil, icon ile oluşturuyoruz
         JLabel label = new JLabel(imageIcon);
 
-        if(!isTopGrid){
+        if (!isTopGrid) {
             cardPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent e) {
-                    if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.WAIT) return;
+                    if (GameState.getInstance().getPlayFlow() == PLAY_FLOW.WAIT)
+                        return;
                     if (selectedCardPanel != null) {
                         selectedCardPanel.setBorder(null);
                     }
                     selectedCardPanel = cardPanel;
-                    if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY ||
+                    if (GameState.getInstance().getPlayFlow() == PLAY_FLOW.PLAY ||
                             GameManager.getInstance().controlIfClickable(
                                     (Card) selectedCardPanel.getClientProperty("card"),
-                                    (Card) opponentSelectedCardPanel.getClientProperty("card")
-                            )
-                    )
-                    {
+                                    (Card) opponentSelectedCardPanel.getClientProperty("card"))) {
                         cardPanel.setBorder(BorderFactory.createLineBorder(HIGHLIGHT_COLOR, 4));
                         GamePageLogic.getInstance().controlSendingCard(card);
                     }
@@ -217,15 +220,14 @@ public class GamePageUI extends JFrame {
         return selectedCardPanel;
     }
 
-    public JPanel getOpponentLastPlayedHandCards(){
+    public JPanel getOpponentLastPlayedHandCards() {
         return opponnentPlayedHandCardPanel;
     }
 
     public void refreshGrids() {
         bottomGrid.removeAll();
-        JPanel emptyPanel=new JPanel();
+        JPanel emptyPanel = new JPanel();
         emptyPanel.setBackground(BG_COLOR);
-
 
         Role myRole = GameState.getInstance().getMe().getRole();
         ArrayList<Card> myBoardCards = GameState.getInstance().getMe().getBoard_cards();
@@ -233,26 +235,25 @@ public class GamePageUI extends JFrame {
         if (myBoardCards != null && myBoardCards.size() >= 20) {
             if (myRole == Role.GUEST) {
                 for (int i = 19; i >= 10; i--) {
-                    if(!myBoardCards.get(i).isTaken()){
-                        bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false,false));
-                    }else{
-                        if(!myBoardCards.get(i-10).isTaken()){
-                            bottomGrid.add(createCardPlaceholder(myBoardCards.get(i-10), false,false));
-                        }else{
-                            bottomGrid.add(emptyPanel);//bottom gridd add boş kart
+                    if (!myBoardCards.get(i).isTaken()) {
+                        bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false, false));
+                    } else {
+                        if (!myBoardCards.get(i - 10).isTaken()) {
+                            bottomGrid.add(createCardPlaceholder(myBoardCards.get(i - 10), false, false));
+                        } else {
+                            bottomGrid.add(emptyPanel);// bottom gridd add boş kart
                         }
                     }
                 }
             } else {
                 for (int i = 10; i < 20; i++) {
-                    if(!myBoardCards.get(i).isTaken()){
-                        bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false,false));
-                    }else if(!myBoardCards.get(i-10).isTaken()){
-                            bottomGrid.add(createCardPlaceholder(myBoardCards.get(i-10), false,false));
-                    }else{
-                       bottomGrid.add(emptyPanel);//bottom gridd add boş kart
+                    if (!myBoardCards.get(i).isTaken()) {
+                        bottomGrid.add(createCardPlaceholder(myBoardCards.get(i), false, false));
+                    } else if (!myBoardCards.get(i - 10).isTaken()) {
+                        bottomGrid.add(createCardPlaceholder(myBoardCards.get(i - 10), false, false));
+                    } else {
+                        bottomGrid.add(emptyPanel);// bottom gridd add boş kart
                     }
-
 
                 }
             }
@@ -266,29 +267,29 @@ public class GamePageUI extends JFrame {
         ArrayList<Card> myOpponentBoardCards = GameState.getInstance().getOpponent().getBoard_cards();
 
         if (myOpponentBoardCards != null && myOpponentBoardCards.size() >= 20) {
-            if(myRole==Role.GUEST){
+            if (myRole == Role.GUEST) {
                 for (int i = 19; i > 9; i--) {
-                    if(!myOpponentBoardCards.get(i).isTaken()){
-                        topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false,true));
-                    }else{
-                        if(!myOpponentBoardCards.get(i-10).isTaken()){
-                            topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i-10), false,true));
-                        }else{
-                            topGrid.add(emptyPanel);//bottom gridd add boş kart
+                    if (!myOpponentBoardCards.get(i).isTaken()) {
+                        topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false, true));
+                    } else {
+                        if (!myOpponentBoardCards.get(i - 10).isTaken()) {
+                            topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i - 10), false, true));
+                        } else {
+                            topGrid.add(emptyPanel);// bottom gridd add boş kart
                         }
                     }
                 }
-            }else{
+            } else {
                 // Rakip kartları her zaman düz (veya isteğe göre ters) basılabilir.
                 // Genelde rakip kartları standart (10-19) bırakılır.
                 for (int i = 10; i < 20; i++) {
-                    if(!myOpponentBoardCards.get(i).isTaken()){
-                        topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false,true));
-                    }else if(!myOpponentBoardCards.get(i-10).isTaken()){
-                        topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i-10), false,true));
-                    }else{
-                        topGrid.add(emptyPanel);//bottom gridd add boş kart
-                        //bottom gridd add boş kart
+                    if (!myOpponentBoardCards.get(i).isTaken()) {
+                        topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i), false, true));
+                    } else if (!myOpponentBoardCards.get(i - 10).isTaken()) {
+                        topGrid.add(createCardPlaceholder(myOpponentBoardCards.get(i - 10), false, true));
+                    } else {
+                        topGrid.add(emptyPanel);// bottom gridd add boş kart
+                        // bottom gridd add boş kart
                     }
                 }
             }
@@ -299,12 +300,12 @@ public class GamePageUI extends JFrame {
         topGrid.repaint();
     }
 
-    public void refreshWest(){
-        if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY){
+    public void refreshWest() {
+        if (GameState.getInstance().getPlayFlow() == PLAY_FLOW.PLAY) {
             playFlowLabel.setText("Oynama sırası sende");
-        }else if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.PLAY_BACK){
+        } else if (GameState.getInstance().getPlayFlow() == PLAY_FLOW.PLAY_BACK) {
             playFlowLabel.setText("Karşı oynama sırası sende");
-        }else if(GameState.getInstance().getPlayFlow()==PLAY_FLOW.WAIT){
+        } else if (GameState.getInstance().getPlayFlow() == PLAY_FLOW.WAIT) {
             playFlowLabel.setText("Bekleniyor...");
         }
         opponnentPlayedHandCardPanel.removeAll();
@@ -313,13 +314,14 @@ public class GamePageUI extends JFrame {
         westPanel.repaint();
     }
 
-    public void refreshRight(){
-        if(!GameState.getInstance().getMe().isAbleToSeeHandCards()) return;
+    public void refreshRight() {
+        if (!GameState.getInstance().getMe().isAbleToSeeHandCards())
+            return;
         eastPanel.removeAll();
-        for(Card card:GameState.getInstance().getMe().getHand_cards()){
+        for (Card card : GameState.getInstance().getMe().getHand_cards()) {
             card.setClose(false);
-            if(!card.isTaken()){
-                eastPanel.add(createCardPlaceholder(card,true,false));
+            if (!card.isTaken()) {
+                eastPanel.add(createCardPlaceholder(card, true, false));
             }
         }
         eastPanel.revalidate();
@@ -329,14 +331,14 @@ public class GamePageUI extends JFrame {
     public void refreshScores() {
         int myScore = GameState.getInstance().getMe().getTaken_cards().size();
         int opponentScore = GameState.getInstance().getOpponent().getTaken_cards().size();
-        if(myScore+opponentScore==52){
-            String result = myScore > opponentScore ? "Sen Kazandın!" :
-                    (opponentScore > myScore ? "Rakip Kazandı!" : "Berabere!");
+        if (myScore + opponentScore == 52) {
+            String result = myScore > opponentScore ? "Sen Kazandın!"
+                    : (opponentScore > myScore ? "Rakip Kazandı!" : "Berabere!");
 
             String message = result + "\nSkor: " + myScore + " - " + opponentScore;
             GameLogic.getInstance().showGameMessage(message);
             GameLogic.getInstance().returnToMainPage();
-        }else{
+        } else {
             myScoreLabel.setText("Sen: " + myScore);
             opponentScoreLabel.setText("Rakip: " + opponentScore);
 
@@ -345,9 +347,9 @@ public class GamePageUI extends JFrame {
         }
     }
 
-    public void assignTrumpLabel(){
-        if(GameState.getInstance().getSecilen_trump()!=null){
-            trumpLabel.setText("Kozun: "+GameState.getInstance().getSecilen_trump());
+    public void assignTrumpLabel() {
+        if (GameState.getInstance().getSecilen_trump() != null) {
+            trumpLabel.setText("Kozun: " + GameState.getInstance().getSecilen_trump());
         }
         trumpLabel.revalidate();
         trumpLabel.repaint();
@@ -370,7 +372,7 @@ public class GamePageUI extends JFrame {
                 }
             }
         }
-        //TopGridde bulamazsa sol panelde göster
+        // TopGridde bulamazsa sol panelde göster
         opponnentPlayedHandCardPanel.removeAll();
         opponnentPlayedHandCardPanel.setBackground(PANEL_COLOR);
         card.setClose(false);
@@ -379,16 +381,14 @@ public class GamePageUI extends JFrame {
 
         // 3. Mevcut panelin İÇİNE ekle (Değişkeni değiştirmek yerine add yapıyoruz)
         opponnentPlayedHandCardPanel.add(newCardPanel);
-        opponnentPlayedHandCardPanel=newCardPanel;
-        opponentSelectedCardPanel.putClientProperty("card",card);
+        opponnentPlayedHandCardPanel = newCardPanel;
+        opponentSelectedCardPanel.putClientProperty("card", card);
         // 4. Paneli yenile ki görünsün
         opponnentPlayedHandCardPanel.revalidate();
         opponnentPlayedHandCardPanel.repaint();
 
-        //refreshWest();
+        // refreshWest();
     }
 
-    public static GamePageUI getInstace() {
-        return instace;
-    }
+
 }
