@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="937f86de-abb2-4247-a904-009b156cd906" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/TrumpGame.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TrumpGame.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Connection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Connection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GamePage/GamePageLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GamePage/GamePageLogic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/GameState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/GameState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TrumpGame/.idea/TrumpGame.iml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/.idea/TrumpGame.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TrumpGame/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/.idea/dbnavigator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TrumpGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TrumpGame/src/Connection.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/Connection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TrumpGame/src/GameLogic.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TrumpGame/src/GameLogic.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tests/GameManagerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tests/GameManagerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,22 +51,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.GameLogic.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.GameLogic.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "false",
+    "JUnit.AllTests.executor": "Run",
+    "JUnit.GameManagerTest.testDecideWhoTakeCase3.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/zuhre/Downloads/junit-4.1.jar",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.16113281",
+    "project.structure.side.proportion": "0.26573426",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\zuhre\OneDrive\Masaüstü\TrumpGame\src\cards" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="src.Main" />
       <module name="TrumpGame" />
@@ -75,9 +91,42 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="AllTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TrumpGame" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="src.tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="src.tests" />
+      <option name="MAIN_CLASS_NAME" value="src.tests.AllTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GameManagerTest.testDecideWhoTakeCase3" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TrumpGame" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="src.tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="src.tests" />
+      <option name="MAIN_CLASS_NAME" value="src.tests.GameManagerTest" />
+      <option name="METHOD_NAME" value="testDecideWhoTakeCase3" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.AllTests" />
+        <item itemvalue="JUnit.GameManagerTest.testDecideWhoTakeCase3" />
       </list>
     </recent_temporary>
   </component>

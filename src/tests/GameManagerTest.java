@@ -106,4 +106,16 @@ public class GameManagerTest {
         assertEquals(opCard, winningCard);
         assertEquals(GameState.getInstance().getOpponent(), opCard.getOwner());
     }
+    @Test
+    public void testDecideWhoTakeCase3(){
+        GameState.getInstance().setSecilen_trump("spades");
+
+        Card myCard = new Card("img", "2", false, "clubs");
+        Card opCard = new Card("img", "2", false, "hearts");
+
+        Card winningCard = GameManager.getInstance().decideWhoTake(myCard, opCard, PLAY_FLOW.PLAY_BACK);
+        assertEquals(opCard, winningCard);
+        assertEquals(GameState.getInstance().getOpponent(), opCard.getOwner());
+
+    }
 }
