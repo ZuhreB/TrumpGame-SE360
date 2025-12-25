@@ -191,7 +191,7 @@ public class Connection {
                 }
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(localCard));
 
-                Timer timer = new Timer(2000, e -> {
+                Timer timer = new Timer(1000, e -> {
                     GameManager.getInstance().decideWhoTake(
                             GamePageLogic.getInstance().getMyLastPlayedCard(),
                             localCard,
