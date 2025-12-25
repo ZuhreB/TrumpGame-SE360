@@ -1,7 +1,8 @@
 package src;
 
 import src.Database.DatabaseManager;
-import src.GameLogic;
+import javax.swing.Timer;
+
 import src.GamePage.GameManager;
 import src.GamePage.GamePageLogic;
 import src.GamePage.GamePageUI;
@@ -189,7 +190,16 @@ public class Connection {
                     DatabaseManager.getInstance().saveMove(opponentUserId, card, PLAY_FLOW.PLAY_BACK);
                 }
                 SwingUtilities.invokeLater(() -> GamePageUI.getInstace().highlightOpponentCard(localCard));
-                GameManager.getInstance().decideWhoTake(GamePageLogic.getInstance().getMyLastPlayedCard(),localCard,PLAY_FLOW.PLAY);
+
+                Timer timer = new Timer(2000, e -> {
+                    GameManager.getInstance().decideWhoTake(
+                            GamePageLogic.getInstance().getMyLastPlayedCard(),
+                            localCard,
+                            PLAY_FLOW.PLAY
+                    );
+                });
+                timer.setRepeats(false);
+                timer.start();
             }
 
         }
