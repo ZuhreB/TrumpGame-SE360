@@ -1,9 +1,6 @@
 package src.GamePage;
-
-import src.Connection;
 import src.GameLogic;
 import src.Model.*;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
